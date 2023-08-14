@@ -1,0 +1,50 @@
+package com.treshermanitos.treshermanitos.config;
+
+import org.springframework.http.ResponseEntity;
+
+public class ApiResponse {
+
+    private boolean ok;
+    private String message;
+    private Object body;
+
+    // Constructor
+    public ApiResponse(boolean ok, String message, Object body) {
+        setOk(ok);
+        setMessage(message);
+        setBody(body);
+    }
+
+    public static ResponseEntity<ApiResponse> oK(Object body) {
+        return ResponseEntity.ok(new ApiResponse(true, "success", body));
+    }
+
+    public static ResponseEntity<ApiResponse> notFound(Object body) {
+        return ResponseEntity.status(404).body(new ApiResponse(false, body.toString(), null));
+    }
+    
+    // Getters and setters
+    public boolean isOk() {
+        return ok;
+    }
+
+    public void setOk(boolean ok) {
+        this.ok = ok;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getBody() {
+        return body;
+    }
+
+    public void setBody(Object body) {
+        this.body = body;
+    }
+}
