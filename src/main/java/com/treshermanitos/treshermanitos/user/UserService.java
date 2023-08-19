@@ -3,35 +3,36 @@ package com.treshermanitos.treshermanitos.user;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.config.BaseService;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.treshermanitos.treshermanitos.exceptions.UserNotFoundException;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserService implements BaseService<User, UserDTO> {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserDtoMapper userDtoMapper;
+
+    private final UserRepository userRepository;
+
+    private final UserDtoMapper userDtoMapper;
+
+    public UserService(UserRepository userRepository, UserDtoMapper userDtoMapper) {
+        this.userRepository = userRepository;
+        this.userDtoMapper = userDtoMapper;
+    }
 
     @Override
     public List<UserDTO> getAll() {
         var users = userRepository.findAll().stream().map(userDtoMapper).collect(Collectors.toList());
         if (users.isEmpty()) {
-            throw new RuntimeException("Users  not found");
+            throw new UserNotFoundException("Users  not found");
         }
         return users;
     }
 
     @Override
     public UserDTO getById(Long id) {
-        return userDtoMapper.apply(userRepository.findById(id).orElseThrow(() -> new RuntimeException("User " + id + " not found")));
+        return userDtoMapper.apply(
+                userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found")));
     }
 
     @Override
@@ -40,7 +41,8 @@ public class UserService implements BaseService<User, UserDTO> {
 
     @Override
     public UserDTO updateById(Long id, UserDTO body) {
-        User optionalUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User " + id + " not found"));
+        User optionalUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
         if (body.getFirstName() != null && !body.getFirstName().isEmpty()) {
             optionalUser.setFirstName(body.getFirstName());
         }
@@ -54,7 +56,7 @@ public class UserService implements BaseService<User, UserDTO> {
         if (body.getProvince() != null && !body.getProvince().isEmpty()) {
             optionalUser.setProvince(body.getProvince());
         }
-        if (body.getAge()!= null) {
+        if (body.getAge() != null) {
             optionalUser.setAge(body.getAge());
         }
         userRepository.save(optionalUser);
@@ -63,9 +65,11 @@ public class UserService implements BaseService<User, UserDTO> {
     }
 
     @Override
-    public UserDTO deleteById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    public Boolean deleteById(Long id) {
+        User optionalUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
+        userRepository.deleteById(optionalUser.getId());
+        return true;
     }
 
 }

@@ -12,5 +12,5 @@ public interface BaseService<T, TDto> {
 
     TDto updateById(Long id, TDto body);
 
-    TDto deleteById(Long id);
+    Boolean deleteById(Long id);
 }
