@@ -15,8 +15,8 @@ import static com.alibou.security.user.Permission.ADMIN_DELETE;
 import static com.alibou.security.user.Permission.ADMIN_READ;
 import static com.alibou.security.user.Permission.ADMIN_UPDATE; */
 import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+/* import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST; */
 import static org.springframework.http.HttpMethod.PUT;
 import lombok.RequiredArgsConstructor;
 

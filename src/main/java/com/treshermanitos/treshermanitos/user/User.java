@@ -7,6 +7,10 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.treshermanitos.treshermanitos.customer.Customer;
+
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +19,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -32,7 +37,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(name = "IDX_e12875dfb3b1d92d7d7c5377e2", columnNames = { "email" }),
 })
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,6 +76,10 @@ public class User implements UserDetails{
     @Column(columnDefinition = "TIMESTAMP", name = "updatedAt")
     private Date updatedAt;
 
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Customer customer;
+
     @PrePersist
     private void prePersist() {
         if (getRole() == null) {
@@ -80,13 +89,11 @@ public class User implements UserDetails{
         setUpdatedAt(getCreatedAt());
     }
 
-
-     @PreUpdate
+    @PreUpdate
     protected void onUpdate() {
         setUpdatedAt(new Date());
     }
 
-    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(getRole().name()));

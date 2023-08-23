@@ -8,7 +8,9 @@ public interface BaseService<T, TDto> {
 
     TDto getById(Long idLong);
 
-    void createOne(TDto body);
+    T getByIdAllEntity(Long idLong);
+
+    TDto createOne(TDto body);
 
     TDto updateById(Long id, TDto body);
 

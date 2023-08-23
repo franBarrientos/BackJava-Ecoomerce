@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.config.BaseService;
-import com.treshermanitos.treshermanitos.exceptions.UserNotFoundException;
+import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
 
 @Service
 public class UserService implements BaseService<User, UserDTO> {
@@ -24,7 +24,7 @@ public class UserService implements BaseService<User, UserDTO> {
     public List<UserDTO> getAll() {
         var users = userRepository.findAll().stream().map(userDtoMapper).collect(Collectors.toList());
         if (users.isEmpty()) {
-            throw new UserNotFoundException("Users  not found");
+            throw new NotFoundException("Users  not found");
         }
         return users;
     }
@@ -32,17 +32,18 @@ public class UserService implements BaseService<User, UserDTO> {
     @Override
     public UserDTO getById(Long id) {
         return userDtoMapper.apply(
-                userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found")));
+                userRepository.findById(id).orElseThrow(() -> new NotFoundException("User " + id + " not found")));
     }
 
     @Override
-    public void createOne(UserDTO body) {
+    public User getByIdAllEntity(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
     }
 
     @Override
     public UserDTO updateById(Long id, UserDTO body) {
         User optionalUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
         if (body.getFirstName() != null && !body.getFirstName().isEmpty()) {
             optionalUser.setFirstName(body.getFirstName());
         }
@@ -67,9 +68,14 @@ public class UserService implements BaseService<User, UserDTO> {
     @Override
     public Boolean deleteById(Long id) {
         User optionalUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
         userRepository.deleteById(optionalUser.getId());
         return true;
+    }
+
+    @Override
+    public UserDTO createOne(UserDTO body) {
+        throw new UnsupportedOperationException("Unimplemented method 'createOne'");
     }
 
 }
