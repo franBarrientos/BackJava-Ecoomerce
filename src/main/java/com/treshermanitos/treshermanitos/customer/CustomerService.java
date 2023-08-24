@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.config.BaseService;
 import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
+import com.treshermanitos.treshermanitos.user.User;
 import com.treshermanitos.treshermanitos.user.UserService;
 
 import lombok.AllArgsConstructor;
@@ -16,13 +17,11 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
 
     private final CustomerRepository customerRepository;
     private final UserService userService;
+    private final CustomerDtoMapper customerDtoMapper;
 
     @Override
     public List<CustomerDTO> getAll() {
         List<CustomerDTO> customers = customerRepository.findAllMapped();
-        if (customers.isEmpty()) {
-            throw new NotFoundException("empty list...");
-        }
         return customers;
     }
 
@@ -34,16 +33,14 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
 
     @Override
     public CustomerDTO createOne(CustomerDTO body) {
-        System.out.println(body);
-        var user = userService.getByIdAllEntity(body.getUser().getId());
-        var customer = Customer.builder()
+        User user = userService.getByIdAllEntity(body.getUser().getId());
+        Customer customer = Customer.builder()
                 .addres(body.getAddres())
                 .dni(body.getDni())
                 .user(user)
                 .build();
-        customerRepository.save(customer);
-        body.setId(user.getId());
-        return body;
+        Customer customerSaved = customerRepository.save(customer);
+        return customerDtoMapper.apply(customerSaved);
     }
 
     @Override

@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity()
-@Table(name = "user", uniqueConstraints = {
+@Table(name = "`user`", uniqueConstraints = {
         @UniqueConstraint(name = "IDX_e12875dfb3b1d92d7d7c5377e2", columnNames = { "email" }),
 })
 public class User implements UserDetails {

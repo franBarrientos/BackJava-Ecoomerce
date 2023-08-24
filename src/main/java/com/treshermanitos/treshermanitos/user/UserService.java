@@ -23,9 +23,6 @@ public class UserService implements BaseService<User, UserDTO> {
     @Override
     public List<UserDTO> getAll() {
         var users = userRepository.findAll().stream().map(userDtoMapper).collect(Collectors.toList());
-        if (users.isEmpty()) {
-            throw new NotFoundException("Users  not found");
-        }
         return users;
     }
 
