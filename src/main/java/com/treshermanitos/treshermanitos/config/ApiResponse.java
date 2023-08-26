@@ -1,15 +1,16 @@
 package com.treshermanitos.treshermanitos.config;
 
+import org.hibernate.mapping.Map;
 import org.springframework.http.ResponseEntity;
 
 public class ApiResponse {
 
     private boolean ok;
-    private String message;
+    private Object message;
     private Object body;
 
     // Constructor
-    public ApiResponse(boolean ok, String message, Object body) {
+    public ApiResponse(boolean ok, Object message, Object body) {
         setOk(ok);
         setMessage(message);
         setBody(body);
@@ -22,13 +23,15 @@ public class ApiResponse {
     public static ResponseEntity<ApiResponse> notFound(Object body) {
         return ResponseEntity.status(404).body(new ApiResponse(false, body.toString(), null));
     }
+
     public static ResponseEntity<ApiResponse> serverError() {
         return ResponseEntity.status(500).body(new ApiResponse(false, "Uknown", null));
     }
+
     public static ResponseEntity<ApiResponse> badRequest(Object body) {
-        return ResponseEntity.status(400).body(new ApiResponse(false, body.toString(), null));
+        return ResponseEntity.status(400).body(new ApiResponse(false, body, null));
     }
-    
+
     // Getters and setters
     public boolean isOk() {
         return ok;
@@ -38,11 +41,11 @@ public class ApiResponse {
         this.ok = ok;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(Object message) {
         this.message = message;
     }
 

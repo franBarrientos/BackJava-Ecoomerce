@@ -1,4 +1,21 @@
 package com.treshermanitos.treshermanitos.customer;
 
-public record CustomerRequest(Integer dni, String addres, Long user) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CustomerRequest {
+    @NotNull
+    private Integer dni;
+    @NotBlank
+    private String addres;
+    @NotNull
+    private Long user;
 }

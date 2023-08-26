@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.treshermanitos.treshermanitos.config.ApiResponse;
 import com.treshermanitos.treshermanitos.user.UserService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -34,11 +35,11 @@ public class CustomerController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> create(@RequestBody CustomerRequest body) {
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody CustomerRequest body) {
         return ApiResponse.oK(customerService.createOne(
-                new CustomerDTO(body.dni(),
-                        body.addres(),
-                        userService.getById(body.user()))));
+                new CustomerDTO(body.getDni(),
+                        body.getAddres(),
+                        userService.getById(body.getUser()))));
 
     }
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.config.BaseService;
 import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
+import com.treshermanitos.treshermanitos.exceptions.RelationshipAlreadyExist;
 import com.treshermanitos.treshermanitos.user.User;
 import com.treshermanitos.treshermanitos.user.UserService;
 
@@ -34,6 +35,9 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
     @Override
     public CustomerDTO createOne(CustomerDTO body) {
         User user = userService.getByIdAllEntity(body.getUser().getId());
+        if (user.getCustomer() != null) {
+            throw new RelationshipAlreadyExist("cann't create a relationship one to one already exist!.");
+        }
         Customer customer = Customer.builder()
                 .addres(body.getAddres())
                 .dni(body.getDni())

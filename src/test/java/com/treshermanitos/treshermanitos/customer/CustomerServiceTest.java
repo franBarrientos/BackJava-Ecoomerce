@@ -1,16 +1,31 @@
 package com.treshermanitos.treshermanitos.customer;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Date;
+import java.util.Optional;
+
+import org.assertj.core.api.DateAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.treshermanitos.treshermanitos.exceptions.RelationshipAlreadyExist;
+import com.treshermanitos.treshermanitos.user.Role;
+import com.treshermanitos.treshermanitos.user.User;
+import com.treshermanitos.treshermanitos.user.UserDTO;
 import com.treshermanitos.treshermanitos.user.UserDtoMapper;
 import com.treshermanitos.treshermanitos.user.UserRepository;
 import com.treshermanitos.treshermanitos.user.UserService;
@@ -21,7 +36,7 @@ public class CustomerServiceTest {
     @Mock
     private CustomerRepository customerRepository;
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
     private CustomerService underTest;
@@ -58,5 +73,48 @@ public class CustomerServiceTest {
         underTest.getById(1l);
 
         verify(customerRepository).findOneMapped(1l);
+    }
+
+    @Test
+    void canCreateOne() {
+        User user = new User(1l, "fran", "barr", "fdsfs@gmail.com", "123", "ctes", 19, Role.ADMIN, "ctes", new Date(),
+                new Date(), null);
+
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        UserDTO user1 = new UserDTO();
+        user1.setId(2L);
+        customerDTO.setUser(user1);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(1l,4556465,"fdfsdfsf",user,new Date(), new Date()));
+
+
+        underTest.createOne(customerDTO);
+
+        ArgumentCaptor<Customer> studenArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+
+        verify(customerRepository).save(studenArgumentCaptor.capture());
+    }
+
+    @Test
+    void shouldThrowRelationshipAlreadyExistError() {
+        Customer customer = new Customer();
+        customer.setId(1l);
+
+        User user = new User(1l, "fran", "barr", "fdsfs@gmail.com", "123", "ctes", 19, Role.ADMIN, "ctes", new Date(),
+                new Date(), customer);
+
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        UserDTO user1 = new UserDTO();
+        user1.setId(2L);
+        customerDTO.setUser(user1);
+
+        assertThrows(RelationshipAlreadyExist.class, () -> {
+            underTest.createOne(customerDTO);
+        });
+
     }
 }
