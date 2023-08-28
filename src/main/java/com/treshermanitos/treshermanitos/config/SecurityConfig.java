@@ -10,15 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.treshermanitos.treshermanitos.user.Role;
-/* import static com.alibou.security.user.Permission.ADMIN_CREATE;
-import static com.alibou.security.user.Permission.ADMIN_DELETE;
-import static com.alibou.security.user.Permission.ADMIN_READ;
-import static com.alibou.security.user.Permission.ADMIN_UPDATE; */
-import static org.springframework.http.HttpMethod.DELETE;
-/* import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST; */
-import static org.springframework.http.HttpMethod.PUT;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -32,21 +24,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-              /*    .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
-                .permitAll() 
-               .requestMatchers(DELETE, "/api/v1/users/{id}")
-                .hasAuthority(Role.ADMIN.toString())
-                .requestMatchers(PUT, "/api/v1/users/{id}")
-                .hasAuthority(Role.ADMIN.toString())
-                .anyRequest()
-                .authenticated() 
-                .and()*/
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        http.csrf(csrf->csrf.disable())
+        .authorizeHttpRequests(req->req.requestMatchers("/auth/**").permitAll()
+            .anyRequest().authenticated())
+                .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

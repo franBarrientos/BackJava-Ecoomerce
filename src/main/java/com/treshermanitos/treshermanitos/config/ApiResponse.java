@@ -1,6 +1,5 @@
 package com.treshermanitos.treshermanitos.config;
 
-import org.hibernate.mapping.Map;
 import org.springframework.http.ResponseEntity;
 
 public class ApiResponse {
