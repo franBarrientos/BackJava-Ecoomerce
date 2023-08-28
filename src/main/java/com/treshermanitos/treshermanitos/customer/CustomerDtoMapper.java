@@ -20,6 +20,7 @@ public class CustomerDtoMapper implements Function<Customer, CustomerDTO> {
                 .id(customer.getId())
                 .addres(customer.getAddres())
                 .dni(customer.getDni())
+                .phone(customer.getPhone())
                 .user(userDtoMapper.apply(customer.getUser()))
                 .build();
 

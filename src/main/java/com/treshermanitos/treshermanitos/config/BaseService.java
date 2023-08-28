@@ -6,6 +6,8 @@ public interface BaseService<T, TDto> {
 
     List<TDto> getAll();
 
+    List<T> getAllEntities();
+
     TDto getById(Long idLong);
 
     T getByIdAllEntity(Long idLong);
@@ -14,5 +16,5 @@ public interface BaseService<T, TDto> {
 
     TDto updateById(Long id, TDto body);
 
-    Boolean deleteById(Long id);
+    void deleteById(Long id);
 }

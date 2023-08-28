@@ -54,7 +54,7 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
     }
 
     @Override
-    public Boolean deleteById(Long id) {
+    public void deleteById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
     }
@@ -63,6 +63,12 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
     public Customer getByIdAllEntity(Long idLong) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getByIdAllEntity'");
+    }
+
+    @Override
+    public List<Customer> getAllEntities() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAllEntities'");
     }
 
 }

@@ -1,7 +1,6 @@
 package com.treshermanitos.treshermanitos.user;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -22,14 +21,17 @@ public class UserService implements BaseService<User, UserDTO> {
 
     @Override
     public List<UserDTO> getAll() {
-        var users = userRepository.findAll().stream().map(userDtoMapper).collect(Collectors.toList());
-        return users;
+       return userRepository.findAllMapped();
     }
+
+    public List<User> getAllEntities(){
+        return userRepository.findAll();
+    }
+
 
     @Override
     public UserDTO getById(Long id) {
-        return userDtoMapper.apply(
-                userRepository.findById(id).orElseThrow(() -> new NotFoundException("User " + id + " not found")));
+        return  userRepository.findByIdMapped(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
     }
 
     @Override
@@ -63,11 +65,11 @@ public class UserService implements BaseService<User, UserDTO> {
     }
 
     @Override
-    public Boolean deleteById(Long id) {
+    public void deleteById(Long id) {
         User optionalUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
-        userRepository.deleteById(optionalUser.getId());
-        return true;
+        optionalUser.setState(false);
+        userRepository.save(optionalUser);
     }
 
     @Override

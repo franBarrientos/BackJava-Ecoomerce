@@ -77,7 +77,7 @@ public class CustomerServiceTest {
 
     @Test
     void canCreateOne() {
-        User user = new User(1l, "fran", "barr", "fdsfs@gmail.com", "123", "ctes", 19, Role.ADMIN, "ctes", new Date(),
+        User user = new User(1l, "fran", "barr", "fdsfs@gmail.com", "123", "ctes", 19, Role.ADMIN, "ctes",null, new Date(),
                 new Date(), null);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
@@ -87,7 +87,7 @@ public class CustomerServiceTest {
         user1.setId(2L);
         customerDTO.setUser(user1);
 
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(1l,4556465,"fdfsdfsf",user,new Date(), new Date()));
+        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(1l,4556465,"fdfsdfsf","379402941",user,new Date(), new Date()));
 
 
         underTest.createOne(customerDTO);
@@ -102,7 +102,7 @@ public class CustomerServiceTest {
         Customer customer = new Customer();
         customer.setId(1l);
 
-        User user = new User(1l, "fran", "barr", "fdsfs@gmail.com", "123", "ctes", 19, Role.ADMIN, "ctes", new Date(),
+        User user = new User(1l, "fran", "barr", "fdsfs@gmail.com", "123", "ctes", 19, Role.ADMIN, "ctes",null, new Date(),
                 new Date(), customer);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));

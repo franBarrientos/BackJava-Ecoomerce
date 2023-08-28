@@ -20,6 +20,9 @@ public class CustomerDTO {
 
     @NotBlank(message = "addres is required")
     private String addres;
+    
+    @NotBlank(message = "phone is required")
+    private String phone;
 
     private UserDTO user;
 

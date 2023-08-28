@@ -1,6 +1,7 @@
 package com.treshermanitos.treshermanitos.customer;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +24,13 @@ public class CustomerController {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse> getAll() {
         return ApiResponse.oK(customerService.getAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id) {
 
         return ApiResponse.oK(customerService.getById(id));

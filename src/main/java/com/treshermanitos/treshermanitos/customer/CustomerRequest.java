@@ -16,6 +16,8 @@ public class CustomerRequest {
     private Integer dni;
     @NotBlank
     private String addres;
+    @NotBlank
+    private String phone;
     @NotNull
     private Long user;
 }

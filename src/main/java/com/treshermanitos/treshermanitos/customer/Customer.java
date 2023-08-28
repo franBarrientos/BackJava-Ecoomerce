@@ -35,6 +35,8 @@ public class Customer {
 
     private String addres;
 
+    private String phone;
+
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;
