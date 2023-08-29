@@ -1,14 +1,16 @@
 package com.treshermanitos.treshermanitos.user;
 
-import java.util.List;
-
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+
+import org.springframework.data.domain.Page;
 
 import com.treshermanitos.treshermanitos.config.BaseService;
 import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
 
 @Service
-public class UserService implements BaseService<User, UserDTO> {
+public class UserService implements BaseService<User, UserDTO>{
 
     private final UserRepository userRepository;
 
@@ -19,27 +21,24 @@ public class UserService implements BaseService<User, UserDTO> {
         this.userDtoMapper = userDtoMapper;
     }
 
-    @Override
-    public List<UserDTO> getAll() {
-       return userRepository.findAllMapped();
+
+    public UsersPaginatedResponse getAllEntities(Pageable pageable) {
+        Page<User> data = userRepository.findAll(pageable);
+        return UsersPaginatedResponse.builder()
+                .users(data.getContent())
+                .totalItems(data.getNumberOfElements())
+                .totalPages(data.getTotalPages())
+                .build();
     }
 
-    public List<User> getAllEntities(){
-        return userRepository.findAll();
-    }
-
-
-    @Override
     public UserDTO getById(Long id) {
-        return  userRepository.findByIdMapped(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
+        return userRepository.findByIdMapped(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
     }
 
-    @Override
     public User getByIdAllEntity(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
     }
 
-    @Override
     public UserDTO updateById(Long id, UserDTO body) {
         User optionalUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
@@ -53,9 +52,7 @@ public class UserService implements BaseService<User, UserDTO> {
         if (body.getCity() != null && !body.getCity().isEmpty()) {
             optionalUser.setCity(body.getCity());
         }
-        if (body.getProvince() != null && !body.getProvince().isEmpty()) {
-            optionalUser.setProvince(body.getProvince());
-        }
+
         if (body.getAge() != null) {
             optionalUser.setAge(body.getAge());
         }
@@ -64,7 +61,6 @@ public class UserService implements BaseService<User, UserDTO> {
 
     }
 
-    @Override
     public void deleteById(Long id) {
         User optionalUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
@@ -72,7 +68,6 @@ public class UserService implements BaseService<User, UserDTO> {
         userRepository.save(optionalUser);
     }
 
-    @Override
     public UserDTO createOne(UserDTO body) {
         throw new UnsupportedOperationException("Unimplemented method 'createOne'");
     }

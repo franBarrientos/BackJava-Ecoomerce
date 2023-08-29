@@ -1,19 +1,15 @@
 package com.treshermanitos.treshermanitos.customer;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.treshermanitos.treshermanitos.auth.AuthService;
 import com.treshermanitos.treshermanitos.config.ApiResponse;
 import com.treshermanitos.treshermanitos.user.UserService;
-
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -24,20 +20,23 @@ public class CustomerController {
     private final UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ApiResponse> getAll() {
-        return ApiResponse.oK(customerService.getAll());
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> getAll(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "15") int limit) {
+        return ApiResponse.oK(customerService.getAll(PageRequest.of(page, limit)));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id) {
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id, Authentication authentication) {
+        // if isn't admin and doesn't have the same id throw 403
+        AuthService.checkIfAdminOrSameUser(id, authentication);
         return ApiResponse.oK(customerService.getById(id));
-
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody CustomerRequest body) {
         return ApiResponse.oK(customerService.createOne(
                 new CustomerDTO(body.getDni(),

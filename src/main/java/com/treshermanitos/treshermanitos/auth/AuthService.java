@@ -1,7 +1,10 @@
 package com.treshermanitos.treshermanitos.auth;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,14 +47,26 @@ public class AuthService {
                                                                 body.getPassword()));
                 var user = repository.findByEmail(body.getEmail()).orElseThrow();
                 var userDto = UserDTO.builder()
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .build();
+                                .id(user.getId())
+                                .firstName(user.getFirstName())
+                                .lastName(user.getLastName())
+                                .email(user.getEmail())
+                                .role(user.getRole())
+                                .build();
                 var jwtToken = jwtService.generateToken(user);
                 return new LoginResponse(jwtToken, userDto);
 
+        }
+
+        public static void checkIfAdminOrSameUser(Long id, Authentication authentication) {
+                Boolean hasPermissionToGetAll = authentication.getAuthorities()
+                                .contains(new SimpleGrantedAuthority(Role.ADMIN.toString()));
+
+                Boolean idParamIsEqualIdUserAuthenticated = (id == ((User) authentication.getPrincipal()).getId());
+
+                if (!hasPermissionToGetAll && !idParamIsEqualIdUserAuthenticated) {
+                        throw new AccessDeniedException("No body returned for respsssonse");
+                }
         }
 
 }

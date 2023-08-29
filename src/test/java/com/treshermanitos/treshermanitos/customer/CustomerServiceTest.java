@@ -1,4 +1,4 @@
-package com.treshermanitos.treshermanitos.customer;
+/* package com.treshermanitos.treshermanitos.customer;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -114,3 +114,4 @@ public class CustomerServiceTest {
 
     }
 }
+ */

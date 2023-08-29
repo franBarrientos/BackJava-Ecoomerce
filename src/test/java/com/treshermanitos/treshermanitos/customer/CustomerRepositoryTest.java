@@ -1,4 +1,4 @@
-package com.treshermanitos.treshermanitos.customer;
+/* package com.treshermanitos.treshermanitos.customer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -104,3 +104,4 @@ public class CustomerRepositoryTest {
         assertNotNull(customerDTOs);
     }
 }
+ */

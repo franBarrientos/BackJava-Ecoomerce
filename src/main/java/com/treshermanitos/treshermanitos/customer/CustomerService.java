@@ -1,7 +1,7 @@
 package com.treshermanitos.treshermanitos.customer;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.config.BaseService;
@@ -20,10 +20,18 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
     private final UserService userService;
     private final CustomerDtoMapper customerDtoMapper;
 
+    public CustomersPaginatedResponse getAll(Pageable pageable) {
+        Page<Customer> data = customerRepository.findAll(pageable);
+        return CustomersPaginatedResponse.builder()
+                .customers(data.getContent())
+                .totalItems(data.getNumberOfElements())
+                .totalPages(data.getTotalPages())
+                .build();
+    }
+
     @Override
-    public List<CustomerDTO> getAll() {
-        List<CustomerDTO> customers = customerRepository.findAllMapped();
-        return customers;
+    public Customer getByIdAllEntity(Long idLong) {
+        return customerRepository.findById(idLong).orElseThrow(()->new NotFoundException("user "+idLong+" not found"));
     }
 
     @Override
@@ -33,10 +41,11 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
     }
 
     @Override
+
     public CustomerDTO createOne(CustomerDTO body) {
         User user = userService.getByIdAllEntity(body.getUser().getId());
         if (user.getCustomer() != null) {
-            throw new RelationshipAlreadyExist("cann't create a relationship one to one already exist!.");
+            throw new RelationshipAlreadyExist("can not create a relationship one to one already exist!.");
         }
         Customer customer = Customer.builder()
                 .addres(body.getAddres())
@@ -47,28 +56,14 @@ public class CustomerService implements BaseService<Customer, CustomerDTO> {
         return customerDtoMapper.apply(customerSaved);
     }
 
-    @Override
     public CustomerDTO updateById(Long id, CustomerDTO body) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateById'");
     }
 
-    @Override
     public void deleteById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
-    }
-
-    @Override
-    public Customer getByIdAllEntity(Long idLong) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getByIdAllEntity'");
-    }
-
-    @Override
-    public List<Customer> getAllEntities() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllEntities'");
     }
 
 }
