@@ -27,9 +27,20 @@ public class CustomerDTO {
     private UserDTO user;
 
     public CustomerDTO(Integer dni, String addres, UserDTO user) {
-        setDni(dni);
-        setAddres(addres);
-        setUser(user);
+        this.setDni(dni);
+        this.setAddres(addres);
+        this.setUser(user);
+    }
+    public CustomerDTO(Integer dni, String addres, String phone) {
+        this.setDni(dni);
+        this.setAddres(addres);
+        this.setPhone(phone);
+    }
+ public CustomerDTO(Long id, Integer dni, String addres, String phone) {
+        this.setId(id);
+        this.setDni(dni);
+        this.setAddres(addres);
+        this.setPhone(phone);
     }
 
 }

@@ -2,10 +2,15 @@ package com.treshermanitos.treshermanitos.user;
 
 import java.util.function.Function;
 
+import com.treshermanitos.treshermanitos.customer.CustomerDtoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserDtoMapper implements Function<User, UserDTO> {
+
+
+
 
     @Override
     public UserDTO apply(User user) {
@@ -18,6 +23,9 @@ public class UserDtoMapper implements Function<User, UserDTO> {
                 .province(user.getProvince())
                 .city(user.getCity())
                 .role(user.getRole())
+/*
+                .customer(customerDtoMapper.apply(user.getCustomer()))
+*/
                 .build();
 
     }

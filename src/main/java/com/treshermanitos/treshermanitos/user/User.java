@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -35,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity()
 @Table(name = "`user`", uniqueConstraints = {
-        @UniqueConstraint(name = "IDX_e12875dfb3b1d92d7d7c5377e2", columnNames = { "email" }),
+        @UniqueConstraint(name = "IDX_e12875dfb3b1d92d7d7c5377e2", columnNames = {"email"}),
 })
 public class User implements UserDetails {
 
@@ -89,7 +86,7 @@ public class User implements UserDetails {
         if (getRole() == null) {
             setRole(Role.USER);
         }
-        if(getState() == null){
+        if (getState() == null) {
             setState(true);
         }
         setCreatedAt(new Date());
@@ -103,8 +100,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()), new SimpleGrantedAuthority("ROLE_"+role.name()));
-      }
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
     @Override
     public String getUsername() {
         return getEmail();
@@ -122,7 +120,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.getState();
     }
 
     @Override
@@ -132,7 +130,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.getState();
     }
+
 
 }

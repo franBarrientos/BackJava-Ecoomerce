@@ -1,6 +1,7 @@
 package com.treshermanitos.treshermanitos.user;
 
 
+import com.treshermanitos.treshermanitos.customer.CustomerDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,9 +11,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+
 
     private Long id;
     @NotBlank(message = "First name is required")
@@ -30,4 +31,19 @@ public class UserDTO {
     private Role role;
 
     private String province;
+
+    private CustomerDTO customer;
+
+
+    public UserDTO(Long id, String firstName, String lastName, String email, String city, Integer age, Role role, String province, CustomerDTO customer) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.city = city;
+        this.age = age;
+        this.role = role;
+        this.province = province;
+        this.customer = customer;
+    }
 }

@@ -23,7 +23,7 @@ public class UserService implements BaseService<User, UserDTO>{
 
 
     public UsersPaginatedResponse getAllEntities(Pageable pageable) {
-        Page<User> data = userRepository.findAll(pageable);
+        Page<UserDTO> data = userRepository.findAllMapped(pageable);
         return UsersPaginatedResponse.builder()
                 .users(data.getContent())
                 .totalItems(data.getNumberOfElements())
