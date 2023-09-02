@@ -22,9 +22,9 @@ public class CustomerController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getAll(
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "15") int limit) {
-        return ApiResponse.oK(customerService.getAll(PageRequest.of(page, limit)));
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int limit) {
+        return ApiResponse.oK(this.customerService.getAll(PageRequest.of(page, limit)));
     }
 
     @GetMapping("/{id}")
@@ -32,17 +32,24 @@ public class CustomerController {
     public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id, Authentication authentication) {
         // if isn't admin and doesn't have the same id throw 403
         AuthService.checkIfAdminOrSameUser(id, authentication);
-        return ApiResponse.oK(customerService.getById(id));
+        return ApiResponse.oK(this.customerService.getById(id));
     }
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody CustomerRequest body) {
-        return ApiResponse.oK(customerService.createOne(
-                new CustomerDTO(body.getDni(),
-                        body.getAddres(),
-                        userService.getById(body.getUser()))));
+        return ApiResponse.oK(this.customerService.createOne(body));
 
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<ApiResponse> update(@PathVariable(value = "id") Long id,
+                                              @RequestBody CustomerDTO body,
+                                              Authentication authentication) {
+        // if isn't admin and doesn't have the same id throw 403
+        AuthService.checkIfAdminOrSameUser(id, authentication);
+
+        return ApiResponse.oK(this.customerService.updateById(id, body));
+    }
 }

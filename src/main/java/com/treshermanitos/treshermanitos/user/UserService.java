@@ -1,71 +1,68 @@
 package com.treshermanitos.treshermanitos.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
 import org.springframework.data.domain.Page;
 
-import com.treshermanitos.treshermanitos.config.BaseService;
 import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
 
 @Service
-public class UserService implements BaseService<User, UserDTO>{
+@RequiredArgsConstructor
+public class UserService {
 
     private final UserRepository userRepository;
-
     private final UserDtoMapper userDtoMapper;
 
-    public UserService(UserRepository userRepository, UserDtoMapper userDtoMapper) {
-        this.userRepository = userRepository;
-        this.userDtoMapper = userDtoMapper;
-    }
-
-
     public UsersPaginatedResponse getAllEntities(Pageable pageable) {
-        Page<UserDTO> data = userRepository.findAllMapped(pageable);
+        Page<UserDTO> dataMapped = userRepository.findAllByStateIsTrue(pageable)
+                .map(userDtoMapper);
         return UsersPaginatedResponse.builder()
-                .users(data.getContent())
-                .totalItems(data.getNumberOfElements())
-                .totalPages(data.getTotalPages())
+                .users(dataMapped.getContent())
+                .totalItems(dataMapped.getNumberOfElements())
+                .totalPages(dataMapped.getTotalPages())
                 .build();
     }
 
     public UserDTO getById(Long id) {
-        return userRepository.findByIdMapped(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
+        User user = userRepository.findByIdAndStateIsTrue(id).orElseThrow(() -> new NotFoundException("User " + id +
+                " " +
+                "not " +
+                "found"));
+        return userDtoMapper.apply(user);
+
     }
 
-    public User getByIdAllEntity(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User " + id + " not found"));
-    }
 
     public UserDTO updateById(Long id, UserDTO body) {
-        User optionalUser = userRepository.findById(id)
+        User user = userRepository.findByIdAndStateIsTrue(id)
                 .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
         if (body.getFirstName() != null && !body.getFirstName().isEmpty()) {
-            optionalUser.setFirstName(body.getFirstName());
+            user.setFirstName(body.getFirstName());
         }
         if (body.getLastName() != null && !body.getLastName().isEmpty()) {
-            optionalUser.setLastName(body.getLastName());
+            user.setLastName(body.getLastName());
         }
 
         if (body.getCity() != null && !body.getCity().isEmpty()) {
-            optionalUser.setCity(body.getCity());
+            user.setCity(body.getCity());
         }
 
         if (body.getAge() != null) {
-            optionalUser.setAge(body.getAge());
+            user.setAge(body.getAge());
         }
-        userRepository.save(optionalUser);
-        return userDtoMapper.apply(optionalUser);
+        userRepository.save(user);
+        return userDtoMapper.apply(user);
 
     }
 
     public void deleteById(Long id) {
-        User optionalUser = userRepository.findById(id)
+        User user = userRepository.findByIdAndStateIsTrue(id)
                 .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
-        optionalUser.setState(false);
-        userRepository.save(optionalUser);
+        user.setState(false);
+        userRepository.save(user);
     }
 
     public UserDTO createOne(UserDTO body) {

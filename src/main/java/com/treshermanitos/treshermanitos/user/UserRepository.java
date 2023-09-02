@@ -10,22 +10,11 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("SELECT NEW com.treshermanitos.treshermanitos.user.UserDTO("
-            + "c.id, c.firstName, c.lastName, c.email, c.city, c.age, c.role, c.province,"
-            + "NEW com.treshermanitos.treshermanitos.customer.CustomerDTO(c.customer.id, c.customer.dni, c.customer.addres, c.customer.phone))"
-            + " FROM User c WHERE c.state = true ")
-    public Page<UserDTO> findAllMapped(Pageable pageable);
+    Page<User> findAllByStateIsTrue(Pageable pageable);
 
 
+    Optional<User> findByEmail(String email);
 
-    @Query("SELECT NEW com.treshermanitos.treshermanitos.user.UserDTO("
-            + "c.id, c.firstName, c.lastName, c.email, c.city, c.age, c.role, c.province,"
-            + "NEW com.treshermanitos.treshermanitos.customer.CustomerDTO(c.customer.id, c.customer.dni, c.customer.addres, c.customer.phone))"
-            + " FROM User c WHERE c.id = :id ")
-    public Optional<UserDTO> findByIdMapped(@Param("id") Long id);
-
-
-
-    public Optional<User> findByEmail(String email);
+    Optional<User> findByIdAndStateIsTrue(Long id);
 
 }

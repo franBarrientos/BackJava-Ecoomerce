@@ -1,7 +1,12 @@
 package com.treshermanitos.treshermanitos.customer;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import com.treshermanitos.treshermanitos.role.RoleDTOMapper;
+import com.treshermanitos.treshermanitos.user.User;
+import com.treshermanitos.treshermanitos.user.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.user.UserDtoMapper;
@@ -9,10 +14,12 @@ import com.treshermanitos.treshermanitos.user.UserDtoMapper;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomerDtoMapper implements Function<Customer, CustomerDTO> {
 
-    private final UserDtoMapper userDtoMapper;
+
+    private final RoleDTOMapper roleDTOMapper;
+
 
     @Override
     public CustomerDTO apply(Customer customer) {
@@ -21,7 +28,22 @@ public class CustomerDtoMapper implements Function<Customer, CustomerDTO> {
                 .addres(customer.getAddres())
                 .dni(customer.getDni())
                 .phone(customer.getPhone())
-                .user(userDtoMapper.apply(customer.getUser()))
+                .user(UserDTO.builder()
+                        .id(customer.getUser().getId())
+                        .firstName(customer.getUser().getFirstName())
+                        .lastName(customer.getUser().getLastName())
+                        .email(customer.getUser().getEmail())
+                        .city(customer.getUser().getCity())
+                        .age(customer.getUser().getAge())
+                        .roles(customer.getUser().getRoles() != null
+                                ?
+                                customer.getUser().getRoles().stream().map(roleDTOMapper).collect(Collectors.toSet())
+                                :
+                                null
+                                )
+                        .province(customer.getUser().getProvince())
+                        .build()
+                )
                 .build();
 
     }

@@ -3,6 +3,7 @@ package com.treshermanitos.treshermanitos.customer;
 import com.treshermanitos.treshermanitos.user.UserDTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +16,13 @@ import lombok.NoArgsConstructor;
 public class CustomerDTO {
     private Long id;
 
-    @NotBlank(message = "dni is required")
+    @NotEmpty(message = "dni is required")
     private Integer dni;
 
-    @NotBlank(message = "addres is required")
+    @NotEmpty(message = "addres is required")
     private String addres;
     
-    @NotBlank(message = "phone is required")
+    @NotEmpty(message = "phone is required")
     private String phone;
 
     private UserDTO user;

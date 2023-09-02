@@ -2,15 +2,19 @@ package com.treshermanitos.treshermanitos.user;
 
 
 import com.treshermanitos.treshermanitos.customer.CustomerDTO;
+import com.treshermanitos.treshermanitos.role.Role;
+import com.treshermanitos.treshermanitos.role.RoleDTO;
+import com.treshermanitos.treshermanitos.role.RoleDTOMapper;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
 
@@ -28,22 +32,14 @@ public class UserDTO {
 
     private Integer age;
 
-    private Role role;
+    private Set<RoleDTO> roles;
 
     private String province;
 
     private CustomerDTO customer;
 
 
-    public UserDTO(Long id, String firstName, String lastName, String email, String city, Integer age, Role role, String province, CustomerDTO customer) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.city = city;
-        this.age = age;
-        this.role = role;
-        this.province = province;
-        this.customer = customer;
-    }
+
+
+
 }

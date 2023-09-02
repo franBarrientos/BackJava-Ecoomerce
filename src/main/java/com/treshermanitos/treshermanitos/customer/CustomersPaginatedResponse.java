@@ -10,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 public class CustomersPaginatedResponse extends PaginatedResponseBase{
-    private List<Customer> customers;
+    private List<CustomerDTO> customers;
 }

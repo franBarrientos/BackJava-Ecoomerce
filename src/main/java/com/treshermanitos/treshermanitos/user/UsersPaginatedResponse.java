@@ -13,4 +13,5 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class UsersPaginatedResponse extends PaginatedResponseBase {
     private List<UserDTO> users;
+
 }

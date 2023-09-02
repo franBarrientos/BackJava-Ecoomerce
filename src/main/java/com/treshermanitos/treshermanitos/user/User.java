@@ -3,30 +3,24 @@ package com.treshermanitos.treshermanitos.user;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.*;
+import com.treshermanitos.treshermanitos.privilege.Privilege;
+import com.treshermanitos.treshermanitos.role.Role;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.treshermanitos.treshermanitos.customer.Customer;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
-@Data
+@Setter @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -60,9 +54,14 @@ public class User implements UserDetails {
     @Nullable
     private Integer age;
 
-    @Column()
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "userId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "roleId", referencedColumnName = "id"))
+    private Set<Role> roles;
 
     @Column()
     @Nullable
@@ -77,15 +76,11 @@ public class User implements UserDetails {
     private Date updatedAt;
 
     @OneToOne(mappedBy = "user")
-    @JsonIgnore
     private Customer customer;
 
 
     @PrePersist
     private void prePersist() {
-        if (getRole() == null) {
-            setRole(Role.USER);
-        }
         if (getState() == null) {
             setState(true);
         }
@@ -100,7 +95,16 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        List<String> rolesAndPrivileges =
+                this.getRoles().stream().flatMap(role -> Stream.concat(
+                                Stream.of(role.getName()),
+                                role.getPrivileges().stream().map(Privilege::getName)))
+                        .collect(Collectors.toList());
+
+
+        return rolesAndPrivileges.stream().map(
+                role -> new SimpleGrantedAuthority(role)
+        ).collect(Collectors.toList());
     }
 
     @Override
