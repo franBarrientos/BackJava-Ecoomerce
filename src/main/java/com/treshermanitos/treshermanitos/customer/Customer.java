@@ -1,19 +1,12 @@
 package com.treshermanitos.treshermanitos.customer;
 
 import java.util.Date;
+import java.util.List;
 
+import com.treshermanitos.treshermanitos.purchase.Purchase;
 import com.treshermanitos.treshermanitos.user.User;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor
@@ -37,6 +30,9 @@ public class Customer {
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Purchase> purchases;
 
     @Column(columnDefinition = "TIMESTAMP", name = "createdAt")
     private Date createdAt;

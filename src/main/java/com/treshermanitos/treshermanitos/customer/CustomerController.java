@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api/v1/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final UserService userService;
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
