@@ -1,14 +1,16 @@
 package com.treshermanitos.treshermanitos.purchase;
 
 import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
-import com.treshermanitos.treshermanitos.product.ProductRepository;
+import com.treshermanitos.treshermanitos.laboratory.PurchaseLab;
+import com.treshermanitos.treshermanitos.purchase.PurchaseDto.PurchaseDTO;
+import com.treshermanitos.treshermanitos.purchase.PurchaseDto.PurchaseDtoMapper;
+import com.treshermanitos.treshermanitos.purchase.PurchaseProjection.PurchaseProjection;
 import com.treshermanitos.treshermanitos.purchase.projections.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,8 +18,10 @@ import java.util.stream.Collectors;
 public class PurchaseService {
     private final PurchaseReporitory purchaseReporitory;
     private final PurchaseDtoMapper purchaseDtoMapper;
+    private final PurchaseLab purchaseLab;
 
     public PurchasesPaginatedResponse getAll(Pageable pageable) {
+        purchaseLab.getAll();
         Page<PurchaseDTO> dataMapped = this.purchaseReporitory.findAll(pageable)
                 .map(this.purchaseDtoMapper);
         return PurchasesPaginatedResponse.builder()
@@ -28,6 +32,7 @@ public class PurchaseService {
     }
 
     public PurchasesPaginatedResponse getAllDefinitive(Pageable pageable) {
+        purchaseLab.getAllDefinitive();
         Page<PurchaseProjectionClass> dataMapped = this.purchaseReporitory.findAllDefinitive(pageable)
                 .map(i -> new PurchaseProjectionClass(
                         i.getId(),
@@ -55,6 +60,7 @@ public class PurchaseService {
 
 
     public PurchasesPaginatedResponse getAllClosedProjection(Pageable pageable) {
+        purchaseLab.getAllClosedProjection();
         Page<PurchaseProjection> dataMapped = this.purchaseReporitory.findAllBy(pageable);
         return PurchasesPaginatedResponse.builder()
                 .purchases(dataMapped.getContent())
@@ -75,6 +81,7 @@ public class PurchaseService {
 
 
     public PurchasesPaginatedResponse getAllClosedProjectionFaster(Pageable pageable) {
+        purchaseLab.getAllClosedProjectionFaster();
         Page<PurchaseProjectionClass> dataMapped =
                 this.purchaseReporitory.findAllByClosedProjectionFaster(pageable)
                         .map(i -> new PurchaseProjectionClass(i.getId(), i.getPayment(), i.getCustomerId(),
@@ -88,9 +95,6 @@ public class PurchaseService {
     }
 
 
-    public List<PurchaseProjectionClass> getAllNamedQuery(Pageable pageable) {
-        return this.purchaseReporitory.findAllByNamedQuery();
-    }
 
     public PurchaseDTO getById(Long id) {
         Purchase purchase = this.purchaseReporitory.findById(id).orElseThrow(() -> new NotFoundException("Purchase " + id +
@@ -101,12 +105,7 @@ public class PurchaseService {
 
     }
 
-    public PurchaseDTOCustom getByIdFast(Long id) {
-        return this.purchaseReporitory.findByIdFast(id).orElseThrow(() -> new NotFoundException("Purchase " + id +
-                " " +
-                "not " +
-                "found"));
-    }
+
 
     public PurchaseDTO updateById(Long id, PurchaseDTO body) {
         Purchase purchase = this.purchaseReporitory.findById(id)

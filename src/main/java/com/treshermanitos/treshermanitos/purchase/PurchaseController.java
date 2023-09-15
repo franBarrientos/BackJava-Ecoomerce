@@ -2,7 +2,7 @@ package com.treshermanitos.treshermanitos.purchase;
 
 import com.treshermanitos.treshermanitos.auth.AuthService;
 import com.treshermanitos.treshermanitos.config.ApiResponse;
-import com.treshermanitos.treshermanitos.user.UserDTO;
+import com.treshermanitos.treshermanitos.purchase.PurchaseDto.PurchaseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -55,13 +55,7 @@ public class PurchaseController {
             @RequestParam(defaultValue = "15") int limit) {
         return ApiResponse.oK(this.purchaseService.getAllClosedProjectionFaster(PageRequest.of(page, limit)));
     }
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/getAllNamedQuery")
-    public ResponseEntity<ApiResponse> getAllNamedQuery(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "15") int limit) {
-        return ApiResponse.oK(this.purchaseService.getAllNamedQuery(PageRequest.of(page, limit)));
-    }
+
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
@@ -71,14 +65,7 @@ public class PurchaseController {
         return ApiResponse.oK(this.purchaseService.getById(id));
 
     }
-    @GetMapping("/{id}/fast")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
-    public ResponseEntity<ApiResponse> getByIdFast(@PathVariable(value = "id") long id, Authentication authentication) {
-        // if isn't admin and doesn't have the same id throw 403
-        AuthService.checkIfAdminOrSameUser(id, authentication);
-        return ApiResponse.oK(this.purchaseService.getByIdFast(id));
 
-    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")

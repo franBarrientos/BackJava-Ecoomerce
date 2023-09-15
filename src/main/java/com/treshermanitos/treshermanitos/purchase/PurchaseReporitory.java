@@ -1,5 +1,7 @@
 package com.treshermanitos.treshermanitos.purchase;
 
+import com.treshermanitos.treshermanitos.purchase.PurchaseProjection.ProductProjection;
+import com.treshermanitos.treshermanitos.purchase.PurchaseProjection.PurchaseProjection;
 import com.treshermanitos.treshermanitos.purchase.projections.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +13,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
-    @Query(name = "getPurchaseDTOCustom", nativeQuery = true)
-    Optional<PurchaseDTOCustom> findByIdFast(@Param("id") Long id);
+
+
+    @Query("SELECT p.id as id, p.payment AS payment, p.customer.id AS customerId, " +
+            "p.customer.dni AS dni, p.customer.addres AS addres, p.customer.user.id AS userId, " +
+            "p.customer.user.firstName AS firstName, p.customer.user.lastName AS lastName " +
+            "FROM Purchase p ")
+    Page<PurchaseProjectionClassI> findAllDefinitive(Pageable pageable);
+
+
+
+
+
+
+
+
 
 
     //NO ME TRAE VARIOS REGISTROS PERO ES INEFICIENTE, PORQUE
@@ -20,14 +35,9 @@ public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
     Page<PurchaseProjection> findAllBy(Pageable pageable);
 
 
-    @Query("SELECT p.id as id, p.payment AS payment, pc.id AS customerId, " +
-            "pc.dni AS dni, pc.addres AS addres, pcu.id AS userId, " +
-            "pcu.firstName AS firstName, pcu.lastName AS lastName " +
-            "FROM Purchase p " +
-            "LEFT JOIN p.customer pc " +
-            "LEFT JOIN pc.user pcu ")
-    Page<PurchaseProjectionClassI> findAllDefinitive(Pageable pageable);
-    //ESTO ME TRAE VARIOS REGISTROS POR CADA PURCHASE
+
+
+
 
          // ESTO FUNCIONAAAA!!!
 
@@ -46,13 +56,10 @@ public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
 
 
 
-    @Query("SELECT p.id as id, p.payment AS payment, pc.id AS customerId, " +
-            "pc.dni AS dni, pc.addres AS addres, pcu.id AS userId, " +
-            "pcu.firstName AS firstName, pcu.lastName AS lastName, " +
-            "pp AS products FROM Purchase p " +
-            "LEFT JOIN p.products pp " +
-            "LEFT JOIN p.customer pc " +
-            "LEFT JOIN pc.user pcu ")
+    @Query("SELECT p.id as id, p.payment as payment, p.customer.id AS customerId, " +
+            "p.customer.dni AS dni, p.customer.addres AS addres, p.customer.user.id AS userId, " +
+            "p.customer.user.firstName AS firstName, p.customer.user.lastName AS lastName, " +
+            "p.products AS products FROM Purchase p ")
     Page<PurchaseProjectionFaster> findAllByButRepeat(Pageable pageable);
     //ESTO ME TRAE VARIOS REGISTROS POR CADA PURCHASE
 
@@ -78,13 +85,5 @@ public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
             countQuery = " SELECT count(*) FROM Purchase",
             nativeQuery = true)
     Page<PurchaseProjectionFasterString> findAllByClosedProjectionFaster(Pageable pageable);
-
-
-
-
-
-
-    @Query(name = "getPurchasesDTOCustom", nativeQuery = true)
-    List<PurchaseProjectionClass> findAllByNamedQuery();
 
 }

@@ -1,5 +1,4 @@
-package com.treshermanitos.treshermanitos.purchase.projections;
-import com.treshermanitos.treshermanitos.product.Product;
+package com.treshermanitos.treshermanitos.purchase.PurchaseProjection;
 import com.treshermanitos.treshermanitos.purchase.PaymentMethod;
 
 import java.util.List;

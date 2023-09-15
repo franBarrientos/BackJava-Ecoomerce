@@ -1,4 +1,4 @@
-package com.treshermanitos.treshermanitos.purchase.projections;
+package com.treshermanitos.treshermanitos.purchase.PurchaseProjection;
 
 public interface CustomerProjection{
     String getDni();

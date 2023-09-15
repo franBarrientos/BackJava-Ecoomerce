@@ -1,8 +1,10 @@
-package com.treshermanitos.treshermanitos.purchase;
+package com.treshermanitos.treshermanitos.purchase.PurchaseDto;
 
 import com.treshermanitos.treshermanitos.customer.Customer;
 import com.treshermanitos.treshermanitos.customer.CustomerDTO;
 import com.treshermanitos.treshermanitos.product.ProductDTO;
+import com.treshermanitos.treshermanitos.purchase.PaymentMethod;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,13 +24,28 @@ public class PurchaseDTO {
 
     private PaymentMethod payment;
 
-    private CustomerDTO customer;
+    private Long customerId;
 
-/*
-    private List<ProductDTO> products;
-*/
+    private Integer dni;
+
+    private String addres;
+
+    private String phone;
+
+    private String firstName;
+
+    private  String lastName;
+
+    private List<ProductProjection> products;
 
     private String state;
 
     private Date createdAt;
+
+
+
 }
+
+
+
+
