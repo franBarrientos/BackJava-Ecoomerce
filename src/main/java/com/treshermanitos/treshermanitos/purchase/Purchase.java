@@ -1,13 +1,10 @@
 package com.treshermanitos.treshermanitos.purchase;
 
 import com.treshermanitos.treshermanitos.customer.Customer;
-import com.treshermanitos.treshermanitos.privilege.Privilege;
 import com.treshermanitos.treshermanitos.product.Product;
-import com.treshermanitos.treshermanitos.purchase.projections.PurchaseProjectionClass;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 

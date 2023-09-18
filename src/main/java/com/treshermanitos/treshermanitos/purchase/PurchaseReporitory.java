@@ -1,6 +1,8 @@
 package com.treshermanitos.treshermanitos.purchase;
 
-import com.treshermanitos.treshermanitos.purchase.PurchaseProjection.ProductProjection;
+import com.treshermanitos.treshermanitos.purchase.PurchaseDto.ProductProjection;
+import com.treshermanitos.treshermanitos.purchase.PurchaseDto.PurchaseDTO;
+import com.treshermanitos.treshermanitos.purchase.PurchaseProjection.ProductProjectionI;
 import com.treshermanitos.treshermanitos.purchase.PurchaseProjection.PurchaseProjection;
 import com.treshermanitos.treshermanitos.purchase.projections.*;
 import org.springframework.data.domain.Page;
@@ -10,24 +12,29 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
 
 
     @Query("SELECT p.id as id, p.payment AS payment, p.customer.id AS customerId, " +
             "p.customer.dni AS dni, p.customer.addres AS addres, p.customer.user.id AS userId, " +
-            "p.customer.user.firstName AS firstName, p.customer.user.lastName AS lastName " +
+            "p.customer.user.firstName AS firstName, p.customer.user.lastName AS lastName, " +
+            "p.state AS state, p.createdAt AS createdAt " +
             "FROM Purchase p ")
     Page<PurchaseProjectionClassI> findAllDefinitive(Pageable pageable);
 
 
+    @Query("SELECT NEW com.treshermanitos.treshermanitos.purchase.PurchaseDto.PurchaseDTO(" +
+            "p.id, p.payment, p.customer.id, p.customer.dni, p.customer.addres," +
+            "p.customer.phone, p.customer.user.firstName, p.customer.user.lastName, p.state, p.createdAt) " +
+            "FROM Purchase p")
+    Page<PurchaseDTO> findAllClassInstanced(Pageable pageable);
 
-
-
-
-
-
+  /*  @Query("SELECT NEW com.treshermanitos.treshermanitos.purchase.PurchaseDto(" +
+            "p.id, p.payment, p.state, p.createdAt ) " +
+            "FROM Purchase p WHERE p.id = 1")
+    PurchaseDTO findOneByIdClassInstanced();
+*/
 
 
     //NO ME TRAE VARIOS REGISTROS PERO ES INEFICIENTE, PORQUE
@@ -35,35 +42,21 @@ public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
     Page<PurchaseProjection> findAllBy(Pageable pageable);
 
 
+    // ESTO FUNCIONAAAA!!!
 
-
-
-
-         // ESTO FUNCIONAAAA!!!
-
-    @Query(value = "SELECT p.* " +
+ /*   @Query(value = "SELECT p.id, p.name, p.price " +
             "FROM purchases_products pp " +
             "JOIN product p ON pp.productId = p.id " +
             "WHERE pp.purchaseId = :purchaseId", nativeQuery = true)
-    List<ProductProjection> findProductsByPurchaseId(@Param("purchaseId") Long purchaseId);
+    List<ProductProjectionI> findProductsByPurchaseId(@Param("purchaseId") Long purchaseId);*/
 
 
     //ESTO ES UNA MIERDA
-/*  @Query("SELECT products FROM Purchase pp RIGHT JOIN pp.products products  WHERE pp.id = :purchaseId")
-    List<ProductProjection> findProductsByPurchaseId(@Param("purchaseId") Long purchaseId);*/
-
-
-
-
-
-    @Query("SELECT p.id as id, p.payment as payment, p.customer.id AS customerId, " +
-            "p.customer.dni AS dni, p.customer.addres AS addres, p.customer.user.id AS userId, " +
-            "p.customer.user.firstName AS firstName, p.customer.user.lastName AS lastName, " +
-            "p.products AS products FROM Purchase p ")
-    Page<PurchaseProjectionFaster> findAllByButRepeat(Pageable pageable);
-    //ESTO ME TRAE VARIOS REGISTROS POR CADA PURCHASE
-
-
+    @Query("SELECT NEW com.treshermanitos.treshermanitos.purchase.PurchaseDto.ProductProjection( " +
+            "pp.id, pp.name, pp.price) " +
+            "FROM Purchase p JOIN p.products pp " +
+            "WHERE p.id = :purchaseId")
+    List<ProductProjection> findProductsByPurchaseId(@Param("purchaseId") Long purchaseId);
 
 
     @Query(value = "SELECT " +
@@ -75,7 +68,8 @@ public interface PurchaseReporitory extends JpaRepository<Purchase, Long> {
             "u.id AS userId, " +
             "u.firstName AS firstName, " +
             "u.lastName AS lastName, " +
-            "GROUP_CONCAT(CONCAT(products.id, ':', products.name) SEPARATOR ', ') AS products " +
+            "GROUP_CONCAT(CONCAT(products.id, ':', products.name, ':', products.price) SEPARATOR ', ') AS products, " +
+            "p.state AS state, p.createdAt AS createdAt " +
             "FROM Purchase p " +
             "JOIN Customer customer ON p.customerId = customer.id " +
             "JOIN User u ON customer.userId = u.id " +

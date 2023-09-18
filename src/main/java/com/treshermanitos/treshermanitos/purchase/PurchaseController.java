@@ -40,13 +40,7 @@ public class PurchaseController {
             @RequestParam(defaultValue = "15") int limit) {
         return ApiResponse.oK(this.purchaseService.getAllClosedProjection(PageRequest.of(page, limit)));
     }
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/getAllClosedProjectionRepeat")
-    public ResponseEntity<ApiResponse> getAllClosedProjectionRepeat(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "15") int limit) {
-        return ApiResponse.oK(this.purchaseService.getAllClosedProjectionRepeat(PageRequest.of(page, limit)));
-    }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllClosedProjectionFaster")
@@ -54,6 +48,13 @@ public class PurchaseController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int limit) {
         return ApiResponse.oK(this.purchaseService.getAllClosedProjectionFaster(PageRequest.of(page, limit)));
+    }
+ @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAllClassInstanced")
+    public ResponseEntity<ApiResponse> getAllClassInstanced(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int limit) {
+        return ApiResponse.oK(this.purchaseService.getAllClassInstanced(PageRequest.of(page, limit)));
     }
 
 

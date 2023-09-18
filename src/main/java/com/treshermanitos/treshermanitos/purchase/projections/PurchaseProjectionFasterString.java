@@ -2,6 +2,7 @@ package com.treshermanitos.treshermanitos.purchase.projections;
 
 import com.treshermanitos.treshermanitos.purchase.PaymentMethod;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PurchaseProjectionFasterString {
@@ -10,7 +11,7 @@ public interface PurchaseProjectionFasterString {
 
     Long getCustomerId();
 
-    String getDni();
+    Integer getDni();
 
     String getAddres();
 
@@ -20,4 +21,8 @@ public interface PurchaseProjectionFasterString {
     String getLastName();
 
     String getProducts();
+
+    String getState();
+
+    Date getCreatedAt();
 }

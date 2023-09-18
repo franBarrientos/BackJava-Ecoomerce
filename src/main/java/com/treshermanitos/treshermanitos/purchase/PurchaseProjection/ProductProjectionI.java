@@ -1,8 +1,11 @@
 package com.treshermanitos.treshermanitos.purchase.PurchaseProjection;
 
-public interface ProductProjection {
+import java.math.BigDecimal;
+
+public interface ProductProjectionI {
     String getName();
     Long getId();
+    BigDecimal getPrice();
 
 
 }

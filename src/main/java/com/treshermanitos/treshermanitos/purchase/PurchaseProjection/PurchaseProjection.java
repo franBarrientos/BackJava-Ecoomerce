@@ -10,7 +10,7 @@ public interface PurchaseProjection {
 
     CustomerProjection getCustomer();
 
-    List<ProductProjection> getProducts();
+    List<ProductProjectionI> getProducts();
 
 }
 

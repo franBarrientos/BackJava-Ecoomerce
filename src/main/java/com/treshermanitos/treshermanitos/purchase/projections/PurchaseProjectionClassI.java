@@ -1,7 +1,9 @@
 package com.treshermanitos.treshermanitos.purchase.projections;
 
 import com.treshermanitos.treshermanitos.purchase.PaymentMethod;
+import com.treshermanitos.treshermanitos.purchase.PurchaseDto.ProductProjection;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PurchaseProjectionClassI {
@@ -13,7 +15,7 @@ public interface PurchaseProjectionClassI {
 
     String getAddres();
 
-    String getDni();
+    Integer getDni();
 
     Long getUserId();
 
@@ -21,5 +23,9 @@ public interface PurchaseProjectionClassI {
 
     String getLastName();
 
-    List<ProductProjectionClass> getProducts();
+    List<ProductProjection> getProducts();
+
+    String getState();
+
+    Date getCreatedAt();
 }
