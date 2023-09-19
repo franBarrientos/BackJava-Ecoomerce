@@ -2,13 +2,10 @@ package com.treshermanitos.treshermanitos.customer;
 
 import com.treshermanitos.treshermanitos.exceptions.NotFoundException;
 import com.treshermanitos.treshermanitos.exceptions.RelationshipAlreadyExist;
-import com.treshermanitos.treshermanitos.role.RoleDTOMapper;
 import com.treshermanitos.treshermanitos.user.User;
-import com.treshermanitos.treshermanitos.user.UserDTO;
 import com.treshermanitos.treshermanitos.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

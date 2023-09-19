@@ -1,12 +1,10 @@
 package com.treshermanitos.treshermanitos.user;
 
+import com.treshermanitos.treshermanitos.user.dto.UserDTO;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +31,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> getAll(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "15") int limit) {
-        return ApiResponse.oK(userService.getAllEntities(PageRequest.of(page, limit)));
+        return ApiResponse.oK(userService.getAll(PageRequest.of(page, limit)));
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,7 @@
 package com.treshermanitos.treshermanitos.user;
 
+import com.treshermanitos.treshermanitos.user.dto.UserDTO;
+import com.treshermanitos.treshermanitos.user.dto.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserDtoMapper userDtoMapper;
 
-    public UsersPaginatedResponse getAllEntities(Pageable pageable) {
-        Page<UserDTO> dataMapped = userRepository.findAllByStateIsTrue(pageable)
-                .map(userDtoMapper);
+    public UsersPaginatedResponse getAll(Pageable pageable) {
+        Page<UserDTO> dataMapped = userRepository.findAllUsersAsDtos(pageable);
+
         return UsersPaginatedResponse.builder()
                 .users(dataMapped.getContent())
                 .totalItems(dataMapped.getNumberOfElements())

@@ -6,14 +6,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.treshermanitos.treshermanitos.config.JwtService;
-import com.treshermanitos.treshermanitos.role.Role;
 import com.treshermanitos.treshermanitos.user.User;
-import com.treshermanitos.treshermanitos.user.UserDTO;
+import com.treshermanitos.treshermanitos.user.dto.UserDTO;
 import com.treshermanitos.treshermanitos.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +56,6 @@ public class AuthService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .roles(user.getRoles().stream().map(roleDTOMapper).collect(Collectors.toSet()))
                 .build();
         var jwtToken = jwtService.generateToken(user);
         return new LoginResponse(jwtToken, userDto);

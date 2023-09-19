@@ -3,6 +3,7 @@ package com.treshermanitos.treshermanitos.product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.treshermanitos.treshermanitos.category.Category;
 import com.treshermanitos.treshermanitos.purchase.Purchase;
+import com.treshermanitos.treshermanitos.purchase.purchasesProducts.PurchaseProduct;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,18 +24,18 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private  String name;
+    private String name;
 
-    private  String description;
+    private String description;
 
     private BigDecimal price;
 
-    @ManyToOne ()
+    @ManyToOne()
     @JsonIgnore
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    private  String img;
+    private String img;
 
     private Long stock;
 
@@ -45,10 +47,8 @@ public class Product {
 
     private Date updatedAt;
 
-    @ManyToMany (mappedBy = "products", fetch = FetchType.LAZY)
-    private List<Purchase> purchases;
-
-
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+    private List<PurchaseProduct> purchaseProducts;
 
 
     @PrePersist

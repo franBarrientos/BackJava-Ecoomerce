@@ -2,6 +2,7 @@ package com.treshermanitos.treshermanitos.purchase;
 
 import com.treshermanitos.treshermanitos.customer.Customer;
 import com.treshermanitos.treshermanitos.product.Product;
+import com.treshermanitos.treshermanitos.purchase.purchasesProducts.PurchaseProduct;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,13 +36,18 @@ public class Purchase {
     @Column(columnDefinition = "TIMESTAMP", name = "updatedAt")
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "purchases_products",
-            joinColumns = @JoinColumn(
-                    name = "purchaseId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "productId", referencedColumnName = "id"))
-    private List<Product> products;
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.PERSIST)
+    private List<PurchaseProduct> purchaseProducts;
 
+    @PrePersist
+    private void prePersist(){
+        this.setState("pending");
+        setCreatedAt(new Date());
+        setUpdatedAt(getCreatedAt());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        setUpdatedAt(new Date());
+    }
 }

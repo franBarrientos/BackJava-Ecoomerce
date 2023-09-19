@@ -1,6 +1,5 @@
 package com.treshermanitos.treshermanitos.customer;
 
-import com.treshermanitos.treshermanitos.user.UserDTO;
 import com.treshermanitos.treshermanitos.user.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

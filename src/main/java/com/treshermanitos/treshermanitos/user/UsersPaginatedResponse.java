@@ -5,7 +5,7 @@ import java.util.List;
 import com.treshermanitos.treshermanitos.config.PaginatedResponseBase;
 
 
-import lombok.AllArgsConstructor;
+import com.treshermanitos.treshermanitos.user.dto.UserDTO;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

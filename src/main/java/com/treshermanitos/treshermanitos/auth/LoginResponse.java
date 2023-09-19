@@ -1,6 +1,6 @@
 package com.treshermanitos.treshermanitos.auth;
 
-import com.treshermanitos.treshermanitos.user.UserDTO;
+import com.treshermanitos.treshermanitos.user.dto.UserDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

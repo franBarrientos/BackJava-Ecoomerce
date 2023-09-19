@@ -1,10 +1,7 @@
-package com.treshermanitos.treshermanitos.purchase.PurchaseDto;
+package com.treshermanitos.treshermanitos.purchase.dto;
 
-import com.treshermanitos.treshermanitos.customer.CustomerDTO;
-import com.treshermanitos.treshermanitos.product.ProductoDtoMapper;
 import com.treshermanitos.treshermanitos.purchase.Purchase;
-import com.treshermanitos.treshermanitos.purchase.PurchaseDto.PurchaseDTO;
-import com.treshermanitos.treshermanitos.user.UserDTO;
+import com.treshermanitos.treshermanitos.purchase.PurchaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +10,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PurchaseDtoMapper implements Function<Purchase, PurchaseDTO> {
-
+public class PurchaseDTOMapper implements Function<Purchase, PurchaseDTO> {
 
     @Override
     public PurchaseDTO apply(Purchase p) {
@@ -27,9 +23,9 @@ public class PurchaseDtoMapper implements Function<Purchase, PurchaseDTO> {
                 .phone(p.getCustomer().getPhone())
                 .lastName(p.getCustomer().getUser().getLastName())
                 .firstName(p.getCustomer().getUser().getFirstName())
-                .products(p.getProducts()
+                .products(p.getPurchaseProducts()
                         .stream()
-                        .map(i->new ProductProjection(i))
+                        .map(ProductSold::new)
                         .collect(Collectors.toList())
                 )
                 .state(p.getState())
