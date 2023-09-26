@@ -1,4 +1,4 @@
-package com.treshermanitos.infrastructure.db.springdata.entities;
+package com.treshermanitos.api.infrastructure.db.springdata.entities;
 
 import java.util.Collection;
 import java.util.Date;
@@ -7,15 +7,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.treshermanitos.api.role.Role;
-import com.treshermanitos.api.privilege.Privilege;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.treshermanitos.customer.Customer;
 
 import jakarta.annotation.Nullable;
 
@@ -23,7 +19,7 @@ import jakarta.annotation.Nullable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity()
+@Entity(name = "User")
 @Table(name = "`user`", uniqueConstraints = {
         @UniqueConstraint(name = "IDX_e12875dfb3b1d92d7d7c5377e2", columnNames = {"email"}),
 })
@@ -60,7 +56,7 @@ public class UserEntity implements UserDetails {
                     name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "roleId", referencedColumnName = "id"))
-    private Set<Role> roles;
+    private Set<RoleEntity> roles;
 
     @Column()
     @Nullable
@@ -75,7 +71,7 @@ public class UserEntity implements UserDetails {
     private Date updatedAt;
 
     @OneToOne(mappedBy = "user")
-    private Customer customer;
+    private CustomerEntity customer;
 
 
     @PrePersist
@@ -97,7 +93,7 @@ public class UserEntity implements UserDetails {
         List<String> rolesAndPrivileges =
                 this.getRoles().stream().flatMap(role -> Stream.concat(
                                 Stream.of(role.getName()),
-                                role.getPrivileges().stream().map(Privilege::getName)))
+                                role.getPrivileges().stream().map(PrivilegeEntity::getName)))
                         .collect(Collectors.toList());
 
 

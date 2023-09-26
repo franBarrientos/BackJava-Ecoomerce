@@ -1,17 +1,21 @@
 package com.treshermanitos.api;
 
-import com.treshermanitos.api.privilege.Privilege;
-import com.treshermanitos.api.privilege.PrivilegeRepository;
-import com.treshermanitos.api.role.Role;
-import com.treshermanitos.api.role.RoleRepository;
+import com.treshermanitos.api.application.repository.PrivilegeRepository;
+import com.treshermanitos.api.application.repository.RoleRepository;
+import com.treshermanitos.api.domain.Privilege;
+import com.treshermanitos.api.domain.Role;
+import com.treshermanitos.api.infrastructure.db.springdata.mapper.PrivilegeEntityMapper;
+import com.treshermanitos.api.infrastructure.db.springdata.mapper.RoleEntityMapper;
+import com.treshermanitos.api.infrastructure.db.springdata.entities.PrivilegeEntity;
+import com.treshermanitos.api.infrastructure.db.springdata.entities.RoleEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +25,8 @@ public class SetupDataLoader implements
     private boolean alreadySetup = false;
     private final RoleRepository roleRepository;
     private final PrivilegeRepository privilegeRepository;
-
+    private final RoleEntityMapper roleEntityMapper;
+    private final PrivilegeEntityMapper privilegeEntityMapper;
 
     @Override
     @Transactional
@@ -29,40 +34,49 @@ public class SetupDataLoader implements
         if (this.alreadySetup)
             return;
         //admin
-        Privilege readPrivilegeAdmin
+        PrivilegeEntity readPrivilegeAdminEntity
                 = createPrivilegeIfNotFound("ADMIN:READ");
-        Privilege writePrivilegeAdmin
+        PrivilegeEntity writePrivilegeAdminEntity
                 = createPrivilegeIfNotFound("ADMIN:WRITE");
-        Privilege updatePrivilegeAdmin
+        PrivilegeEntity updatePrivilegeAdminEntity
                 = createPrivilegeIfNotFound("ADMIN:UPDATE");
-        Privilege deletePrivilegeAdmin
+        PrivilegeEntity deletePrivilegeAdminEntity
                 = createPrivilegeIfNotFound("ADMIN:DELETE");
-        //user
+        PrivilegeEntity DASDASDSA
+                = createPrivilegeIfNotFound("ADMIN:DELETE");
+        Set<PrivilegeEntity> pps = new HashSet<>(){{
+            add(readPrivilegeAdminEntity);
+            add(writePrivilegeAdminEntity);
+            add(updatePrivilegeAdminEntity);
+            add(deletePrivilegeAdminEntity);
+        }};
 
-        Privilege readPrivilegeUser
+
+
+        PrivilegeEntity readPrivilegeUserEntity
                 = createPrivilegeIfNotFound("USER:READ");
-        Privilege writePrivilegeUser
+        PrivilegeEntity writePrivilegeUserEntity
                 = createPrivilegeIfNotFound("USER:WRITE");
-        Privilege updatePrivilegeUser
+        PrivilegeEntity updatePrivilegeUserEntity
                 = createPrivilegeIfNotFound("USER:UPDATE");
-        Privilege deletePrivilegeUser
+        PrivilegeEntity deletePrivilegeUserEntity
                 = createPrivilegeIfNotFound("USER:DELETE");
 
 
-        List<Privilege> adminPrivileges = List.of(
-                readPrivilegeAdmin,
-                writePrivilegeAdmin,
-                updatePrivilegeAdmin,
-                deletePrivilegeAdmin);
+        List<PrivilegeEntity> adminPrivilegeEntities = List.of(
+                readPrivilegeAdminEntity,
+                writePrivilegeAdminEntity,
+                updatePrivilegeAdminEntity,
+                deletePrivilegeAdminEntity);
 
-        List<Privilege> userPrivileges = List.of(
-                readPrivilegeUser,
-                writePrivilegeUser,
-                updatePrivilegeUser,
-                deletePrivilegeUser);
+        List<PrivilegeEntity> userPrivilegeEntities = List.of(
+                readPrivilegeUserEntity,
+                writePrivilegeUserEntity,
+                updatePrivilegeUserEntity,
+                deletePrivilegeUserEntity);
 
-        createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_USER", userPrivileges);
+        createRoleIfNotFound("ROLE_ADMIN", adminPrivilegeEntities);
+        createRoleIfNotFound("ROLE_USER", userPrivilegeEntities);
 /*
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         User user = new User();
@@ -79,25 +93,40 @@ public class SetupDataLoader implements
 
 
     @Transactional
-    public Privilege createPrivilegeIfNotFound(String name) {
+    public PrivilegeEntity createPrivilegeIfNotFound(String name) {
 
-        Privilege privilege = privilegeRepository.findPrivilegeByName(name);
-        if (privilege == null) {
-            privilege = new Privilege(name);
-            privilegeRepository.save(privilege);
+        Optional<Privilege> privilegeEntity = privilegeRepository
+                .findPrivilegeByName(name);
+
+        if (privilegeEntity.isEmpty()) {
+            Privilege privilegeNew = new Privilege(name);
+            return this.privilegeEntityMapper
+                    .toEntity(privilegeRepository.save(privilegeNew));
+        }else {
+            return this.privilegeEntityMapper
+                    .toEntity(privilegeEntity.get());
         }
-        return privilege;
+
     }
-    @Transactional
-    public Role createRoleIfNotFound(
-            String name, Collection<Privilege> privileges) {
 
-        Role role = roleRepository.findRoleByName(name);
-        if (role == null) {
-            role = new Role(name, privileges);
-            roleRepository.save(role);
+
+    @Transactional
+    public RoleEntity createRoleIfNotFound(
+            String name, Collection<PrivilegeEntity> privilegeEntities) {
+
+        Optional<Role> role = roleRepository.findRoleByName(name);
+
+        if (role.isEmpty()) {
+            Role roleNew = new Role(name, privilegeEntities
+                    .stream()
+                    .map(this.privilegeEntityMapper::toDomain)
+                    .collect(Collectors.toList())
+            );
+            return this.roleEntityMapper
+                    .toEntity(this.roleRepository.save(roleNew));
+        }else {
+            return this.roleEntityMapper.toEntity(role.get());
         }
-        return role;
     }
 }
 

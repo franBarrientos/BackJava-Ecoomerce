@@ -45,6 +45,10 @@ public class User {
         this.customer = customer;
     }
 
+    public User(){
+
+    }
+
     public Long getId() {
         return id;
     }

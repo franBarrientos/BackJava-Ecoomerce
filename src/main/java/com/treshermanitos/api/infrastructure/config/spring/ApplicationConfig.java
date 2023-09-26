@@ -1,6 +1,6 @@
-package com.treshermanitos.infrastructure.config.spring;
+package com.treshermanitos.api.infrastructure.config.spring;
 
-import com.treshermanitos.application.repository.UserRepository;
+import com.treshermanitos.api.application.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -33,6 +33,7 @@ public class ApplicationConfig {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 return userRepository.findByEmail(username)
+                        .map(CustomUserDetails::new)
                         .orElseThrow(() -> new UsernameNotFoundException("not found"));
             }
 

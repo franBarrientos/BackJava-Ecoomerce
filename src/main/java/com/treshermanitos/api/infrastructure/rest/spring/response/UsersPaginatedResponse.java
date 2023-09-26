@@ -1,11 +1,11 @@
-package com.treshermanitos.infrastructure.rest.spring.response;
+package com.treshermanitos.api.infrastructure.rest.spring.response;
 
 import java.util.List;
 
-import com.treshermanitos.infrastructure.config.spring.PaginatedResponseBase;
+import com.treshermanitos.api.infrastructure.config.spring.PaginatedResponseBase;
 
 
-import com.treshermanitos.infrastructure.rest.spring.dto.UserDTO;
+import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

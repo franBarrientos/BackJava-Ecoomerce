@@ -17,6 +17,14 @@ public class Role {
         this.setUsers(users);
         this.setPrivileges(privileges);
     }
+    public Role( String name, List<Privilege> privileges) {
+        this.setName(name);
+        this.setPrivileges(privileges);
+    }
+
+    public Role() {
+    }
+
 
     public Long getId() {
         return id;

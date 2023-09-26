@@ -1,4 +1,4 @@
-package com.treshermanitos.infrastructure.config.spring;
+package com.treshermanitos.api.infrastructure.config.spring;
 
 import java.security.Key;
 import java.util.Date;

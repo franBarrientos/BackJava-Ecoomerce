@@ -1,10 +1,10 @@
-package com.treshermanitos.infrastructure.rest.spring.resources;
+package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
-import com.treshermanitos.application.service.UserService;
-import com.treshermanitos.infrastructure.config.spring.ApiResponse;
-import com.treshermanitos.infrastructure.rest.spring.dto.UserDTO;
-import com.treshermanitos.infrastructure.rest.spring.mapper.UserDtoMapper;
-import com.treshermanitos.infrastructure.rest.spring.response.UsersPaginatedResponse;
+import com.treshermanitos.api.application.service.UserService;
+import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
+import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
+import com.treshermanitos.api.infrastructure.rest.spring.mapper.UserDtoMapper;
+import com.treshermanitos.api.infrastructure.rest.spring.response.UsersPaginatedResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class UserController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "15") int limit) {
         Page<UserDTO> userDTOS = this.userService.getAllUsers(PageRequest.of(page, limit))
-                .map(userDtoMapper::apply);
+                .map(userDtoMapper::toDto);
 
         return ApiResponse.oK(
                 UsersPaginatedResponse.builder()

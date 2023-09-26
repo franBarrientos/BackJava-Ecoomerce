@@ -1,4 +1,4 @@
-package com.treshermanitos.infrastructure.config.spring;
+package com.treshermanitos.api.infrastructure.config.spring;
 
 import java.util.stream.Collectors;
 
@@ -7,9 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.treshermanitos.exceptions.BadRequest;
-import com.treshermanitos.exceptions.NotFoundException;
-import com.treshermanitos.exceptions.RelationshipAlreadyExist;
+import com.treshermanitos.api.application.exceptions.BadRequest;
+import com.treshermanitos.api.application.exceptions.NotFoundException;
+import com.treshermanitos.api.application.exceptions.RelationshipAlreadyExist;
 
 import jakarta.servlet.http.HttpServletRequest;
 

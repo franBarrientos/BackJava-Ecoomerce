@@ -1,4 +1,4 @@
-package com.treshermanitos.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.infrastructure.rest.spring.dto;
 
 
 import jakarta.validation.constraints.Email;
@@ -27,7 +27,7 @@ public class UserDTO {
 
     private String province;
 
-    private CustomerDetails customer;
+    private CustomerDTOWithoutUser customer;
 
     public UserDTO(Long id, String firstName, String lastName,
                    String email, String city,
@@ -43,7 +43,7 @@ public class UserDTO {
         this.setProvince(province);
         this.setCustomer(
                 customerId != null ?
-                new CustomerDetails(customerId,customerDni,customerAddres,customerPhone)
+                new CustomerDTOWithoutUser(customerId,customerDni,customerAddres,customerPhone)
                 :
                         null
                 );

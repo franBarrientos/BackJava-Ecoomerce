@@ -1,11 +1,12 @@
-package com.treshermanitos.infrastructure.db.springdata.repository;
+package com.treshermanitos.api.infrastructure.db.springdata.repository;
 
 import java.util.Optional;
 
-import com.treshermanitos.application.repository.UserRepository;
-import com.treshermanitos.domain.User;
-import com.treshermanitos.exceptions.NotFoundException;
-import com.treshermanitos.infrastructure.db.springdata.mapper.UserEntityMapper;
+import com.treshermanitos.api.application.repository.UserRepository;
+import com.treshermanitos.api.domain.User;
+import com.treshermanitos.api.infrastructure.db.springdata.entities.UserEntity;
+import com.treshermanitos.api.application.exceptions.NotFoundException;
+import com.treshermanitos.api.infrastructure.db.springdata.mapper.UserEntityMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,33 +22,56 @@ public class UserDboRepository implements UserRepository {
     @Override
     public Page<User> findAll(Pageable pageable) {
         return this.userRepository.findAll(pageable)
-                .map(userEntityMapper::apply);
+                .map(userEntityMapper::toDomain);
     }
 
     @Override
     public Optional<User> findById(Long id) {
-        return Optional.empty();
+        Optional<UserEntity> user = this.userRepository.findById(id);
+        return user.isPresent()?
+                Optional.of(userEntityMapper.toDomain(user.get()))
+                :
+                Optional.empty();
+
     }
 
     @Override
-    public User findByEmail(String email) {
-        return this.userEntityMapper.apply(this.userRepository.findByEmail(email)
-                .orElseThrow(()->new NotFoundException("not found")));
+    public Optional<User> findByEmail(String email) {
+        Optional<UserEntity> user = this.userRepository.findByEmail(email);
+        return user.isPresent()?
+                Optional.of(userEntityMapper.toDomain(user.get()))
+                :
+                Optional.empty();
     }
 
     @Override
     public User save(User user) {
-        return null;
+
+        return this.userEntityMapper.toDomain(
+                this.userRepository.save(this.userEntityMapper.toEntity(user)));
     }
 
     @Override
     public Optional<User> findUserIsActive(Long id) {
-        return Optional.empty();
+        Optional<UserEntity> user = this.userRepository.findByIdAndStateIsTrue(id);
+        return user.isPresent()?
+                Optional.of(userEntityMapper.toDomain(user.get()))
+                :
+                Optional.empty();
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return false;
+        Optional<UserEntity> userEntity = this.userRepository.findByIdAndStateIsTrue(id);
+        if (userEntity.isPresent()){
+            User user = this.userEntityMapper.toDomain(userEntity.get());
+            user.setState(false);
+            this.userRepository.save(this.userEntityMapper.toEntity(user));
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }
   /*  Optional<User> findByEmail(String email);

@@ -1,7 +1,8 @@
-package com.treshermanitos.application.service;
+package com.treshermanitos.api.application.service;
 
-import com.treshermanitos.application.repository.UserRepository;
-import com.treshermanitos.domain.User;
+import com.treshermanitos.api.application.exceptions.NotFoundException;
+import com.treshermanitos.api.application.repository.UserRepository;
+import com.treshermanitos.api.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,17 @@ public class UserService {
         return this.userRepository.findAll(pageable);
     }
 
-    public Optional<User> getUserIsActive(Long id){
-        return this.userRepository.findUserIsActive(id);
+    public User getUserIsActive(Long id) {
+        return this.userRepository
+                .findUserIsActive(id)
+                .orElseThrow(()->new NotFoundException("user "+id+" not found"));
+    }
+
+    public void deleteById(Long id) {
+        User user = this.userRepository.findUserIsActive(id)
+                .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
+        user.setState(false);
+        userRepository.save(user);
     }
 
 

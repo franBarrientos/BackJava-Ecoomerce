@@ -1,6 +1,6 @@
-package com.treshermanitos.application.repository;
+package com.treshermanitos.api.application.repository;
 
-import com.treshermanitos.domain.User;
+import com.treshermanitos.api.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,7 +11,7 @@ public interface UserRepository {
 
     Optional<User> findById(Long id);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     User save (User user);
 
