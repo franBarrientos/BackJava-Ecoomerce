@@ -6,6 +6,7 @@ import com.treshermanitos.api.application.repository.CustomerRepository;
 import com.treshermanitos.api.application.repository.UserRepository;
 import com.treshermanitos.api.domain.Customer;
 import com.treshermanitos.api.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
 
-    public CustomerService(CustomerRepository customerRepository,
-                           UserRepository userRepository) {
-        this.customerRepository = customerRepository;
-        this.userRepository = userRepository;
-    }
+
 
     public Page<Customer> getAll(Pageable pageable){
         return this.customerRepository.findAllActiveCustomers(pageable);

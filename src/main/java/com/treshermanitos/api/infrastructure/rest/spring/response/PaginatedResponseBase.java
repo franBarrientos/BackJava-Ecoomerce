@@ -1,4 +1,4 @@
-package com.treshermanitos.api.infrastructure.config.spring;
+package com.treshermanitos.api.infrastructure.rest.spring.response;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

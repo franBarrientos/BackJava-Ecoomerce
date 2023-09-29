@@ -12,7 +12,6 @@ public interface ProductEntityMapper {
     Product toDomain(ProductEntity entity);
 
 
-    @Mapping(target = "category.products", ignore = true)
     ProductEntity toEntity(Product domain);
 }
 

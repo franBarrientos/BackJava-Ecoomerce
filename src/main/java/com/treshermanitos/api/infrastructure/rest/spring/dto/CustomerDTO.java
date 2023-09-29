@@ -1,5 +1,6 @@
 package com.treshermanitos.api.infrastructure.rest.spring.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
 
@@ -25,24 +26,8 @@ public class CustomerDTO {
     @NotEmpty(message = "phone is required")
     private String phone;
 
+    @JsonIgnoreProperties({"customer"})
     private UserDTO user;
-
-    public CustomerDTO(Integer dni, String addres, UserDTO user) {
-        this.setDni(dni);
-        this.setAddres(addres);
-        this.setUser(user);
-    }
-    public CustomerDTO(Integer dni, String addres, String phone) {
-        this.setDni(dni);
-        this.setAddres(addres);
-        this.setPhone(phone);
-    }
- public CustomerDTO(Long id, Integer dni, String addres, String phone) {
-        this.setId(id);
-        this.setDni(dni);
-        this.setAddres(addres);
-        this.setPhone(phone);
-    }
 
 }
 

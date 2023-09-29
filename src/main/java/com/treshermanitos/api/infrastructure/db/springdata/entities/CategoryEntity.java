@@ -1,5 +1,6 @@
 package com.treshermanitos.api.infrastructure.db.springdata.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 

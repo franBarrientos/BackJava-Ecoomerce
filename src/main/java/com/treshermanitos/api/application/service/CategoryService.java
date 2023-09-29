@@ -3,6 +3,7 @@ package com.treshermanitos.api.application.service;
 import com.treshermanitos.api.application.exceptions.NotFoundException;
 import com.treshermanitos.api.application.repository.CategoryRepository;
 import com.treshermanitos.api.domain.Category;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     public Page<Category> getAll(Pageable pageable){
         return this.categoryRepository.findAllByStateIsTrue(pageable);

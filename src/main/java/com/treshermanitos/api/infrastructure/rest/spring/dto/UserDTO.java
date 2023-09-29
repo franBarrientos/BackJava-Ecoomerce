@@ -1,6 +1,7 @@
 package com.treshermanitos.api.infrastructure.rest.spring.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -27,26 +28,8 @@ public class UserDTO {
 
     private String province;
 
-    private CustomerDTOWithoutUser customer;
+    @JsonIgnoreProperties({"user"})
+    private CustomerDTO customer;
 
-    public UserDTO(Long id, String firstName, String lastName,
-                   String email, String city,
-                   Integer age, String province,
-                   Long customerId, Integer customerDni,
-                   String customerAddres, String customerPhone) {
-        this.setId(id);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setEmail(email);
-        this.setCity(city);
-        this.setAge(age);
-        this.setProvince(province);
-        this.setCustomer(
-                customerId != null ?
-                new CustomerDTOWithoutUser(customerId,customerDni,customerAddres,customerPhone)
-                :
-                        null
-                );
-    }
 }
 

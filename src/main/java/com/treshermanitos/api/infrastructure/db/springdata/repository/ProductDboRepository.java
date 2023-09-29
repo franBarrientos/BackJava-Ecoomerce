@@ -20,9 +20,8 @@ public class ProductDboRepository implements ProductRepository {
 
     @Override
     public Page<Product> findAllByHasStockIsTrue(Pageable pageable) {
-        Page<Product> tets = this.productRepository.findAllByHasStockIsTrue(pageable)
+        return this.productRepository.findAllByHasStockIsTrue(pageable)
                 .map(productEntityMapper::toDomain);
-        return tets;
     }
 
     @Override

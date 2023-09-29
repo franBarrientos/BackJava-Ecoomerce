@@ -10,6 +10,7 @@ import com.treshermanitos.api.infrastructure.db.springdata.entities.UserEntity;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface UserEntityMapper {

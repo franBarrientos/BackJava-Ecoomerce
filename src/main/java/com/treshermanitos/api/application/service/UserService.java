@@ -3,6 +3,7 @@ package com.treshermanitos.api.application.service;
 import com.treshermanitos.api.application.exceptions.NotFoundException;
 import com.treshermanitos.api.application.repository.UserRepository;
 import com.treshermanitos.api.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public Page<User> getAllUsers(Pageable pageable){
         return this.userRepository.findAll(pageable);

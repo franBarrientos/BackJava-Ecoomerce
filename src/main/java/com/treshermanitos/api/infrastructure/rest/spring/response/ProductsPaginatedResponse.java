@@ -1,6 +1,5 @@
 package com.treshermanitos.api.infrastructure.rest.spring.response;
 
-import com.treshermanitos.api.infrastructure.config.spring.PaginatedResponseBase;
 import com.treshermanitos.api.infrastructure.rest.spring.dto.ProductDTO;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

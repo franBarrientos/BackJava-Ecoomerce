@@ -5,10 +5,8 @@ import com.treshermanitos.api.infrastructure.db.springdata.entities.CustomerEnti
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserEntityMapper.class)
 public interface CustomerEntityMapper {
-
-
     @Mapping(target = "user.customer", ignore = true)
     Customer toDomain(CustomerEntity customerEntity);
 

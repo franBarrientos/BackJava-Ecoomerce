@@ -1,48 +1,50 @@
 package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
 import com.treshermanitos.api.application.service.ProductService;
-import com.treshermanitos.api.domain.Product;
+import com.treshermanitos.api.application.service.PurchaseService;
+import com.treshermanitos.api.domain.Purchase;
 import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
 import com.treshermanitos.api.infrastructure.rest.spring.dto.ProductDTO;
+import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseDTO;
 import com.treshermanitos.api.infrastructure.rest.spring.mapper.ProductDtoMapper;
+import com.treshermanitos.api.infrastructure.rest.spring.mapper.PurchaseDtoMapper;
 import com.treshermanitos.api.infrastructure.rest.spring.response.ProductsPaginatedResponse;
-import jakarta.validation.Valid;
+import com.treshermanitos.api.infrastructure.rest.spring.response.PurchasePaginatedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1/purchases")
 @RequiredArgsConstructor
-public class ProductController {
-    private final ProductService productService;
-    private final ProductDtoMapper productDtoMapper;
+public class PurchaseController {
+    private final PurchaseService purchaseService;
+    private final PurchaseDtoMapper purchaseDtoMapper;
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int limit) {
-        Page<ProductDTO> products = this.productService.getAll(PageRequest.of(page, limit))
-                .map(productDtoMapper::toDto);
+        Page<PurchaseDTO> purchases = this.purchaseService.getAllPurchases(PageRequest.of(page, limit))
+                .map(purchaseDtoMapper::toDto);
 
         return ApiResponse.oK(
-                ProductsPaginatedResponse.builder()
-                        .products(products.getContent())
-                        .totalPages(products.getTotalPages())
-                        .totalItems(products.getNumberOfElements())
+                PurchasePaginatedResponse.builder()
+                        .purchases(purchases.getContent())
+                        .totalPages(purchases.getTotalPages())
+                        .totalItems(purchases.getNumberOfElements())
                         .build()
                 );
     }
 
 
-    @GetMapping("/{id}")
+ /*   @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id, Authentication authentication) {
         return ApiResponse.oK(this.productService.getById(id));
-    }
+    }*/
 
 
 /*    @PostMapping

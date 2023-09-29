@@ -5,21 +5,17 @@ import com.treshermanitos.api.application.repository.CategoryRepository;
 import com.treshermanitos.api.application.repository.ProductRepository;
 import com.treshermanitos.api.domain.Category;
 import com.treshermanitos.api.domain.Product;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-
-    public ProductService(ProductRepository productRepository,
-                          CategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-    }
 
     public Page<Product> getAll(Pageable pageable) {
         return this.productRepository.findAllByHasStockIsTrue(pageable);

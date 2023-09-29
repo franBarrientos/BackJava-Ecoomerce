@@ -1,5 +1,6 @@
 package com.treshermanitos.api.infrastructure.db.springdata.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.treshermanitos.api.infrastructure.db.springdata.entities.CategoryEntity;
@@ -21,7 +22,6 @@ import java.util.List;
 @Entity(name = "Product")
 @Table(name = "`product`")
 public class ProductEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +33,6 @@ public class ProductEntity {
     private BigDecimal price;
 
     @ManyToOne()
-    @JsonIgnoreProperties({"products"})
     @JoinColumn(name = "categoryId")
     private CategoryEntity category;
 
@@ -49,10 +48,8 @@ public class ProductEntity {
 
     private Date updatedAt;
 
-/*
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
-    private List<PurchaseProduct> purchaseProducts;
-*/
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<PurchaseProductEntity> purchaseProducts;
 
 
     @PrePersist
