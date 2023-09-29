@@ -1,9 +1,11 @@
 package com.treshermanitos.api.domain;
 
+import lombok.Builder;
+
 import java.util.Date;
 import java.util.List;
 
-
+@Builder
 public class Purchase {
     private Long id;
 

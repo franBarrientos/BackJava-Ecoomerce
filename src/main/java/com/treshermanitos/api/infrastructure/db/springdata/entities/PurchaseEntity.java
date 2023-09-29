@@ -36,4 +36,17 @@ public class PurchaseEntity {
 
     @OneToMany(mappedBy = "purchase", fetch = FetchType.EAGER)
     private List<PurchaseProductEntity> purchaseProducts;
+
+    @PrePersist
+    private void prePersist() {
+        this.setState("pendiente");
+        this.setCreatedAt(new Date());
+        this.setUpdatedAt(getCreatedAt());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.setUpdatedAt(new Date());
+    }
+
 }

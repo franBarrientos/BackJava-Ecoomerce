@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class CustomerDTO {
     private Long id;
 
-    @NotEmpty(message = "dni is required")
+    @NotNull(message = "dni is required")
     private Integer dni;
 
     @NotEmpty(message = "addres is required")

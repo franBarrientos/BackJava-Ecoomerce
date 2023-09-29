@@ -21,7 +21,15 @@ public class PurchaseDboRepository implements PurchaseRepository {
 
     @Override
     public Page<Purchase> findAll(Pageable pageable) {
-        return this.purchaseRepository.findAll(pageable)
+        return this.purchaseRepository
+                .findAll(pageable)
+                .map(purchaseEntityMapper::toDomain);
+    }
+
+    @Override
+    public Page<Purchase> search(Integer dni, String firstName, String lastName, Pageable pageable) {
+        return this.purchaseRepository
+                .search(dni, firstName, lastName, pageable)
                 .map(purchaseEntityMapper::toDomain);
     }
 

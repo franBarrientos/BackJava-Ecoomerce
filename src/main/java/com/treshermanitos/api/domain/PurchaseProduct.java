@@ -1,6 +1,9 @@
 package com.treshermanitos.api.domain;
+import lombok.Builder;
+
 import java.math.BigDecimal;
 
+@Builder
 public class PurchaseProduct {
     private Long id;
 

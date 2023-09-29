@@ -11,10 +11,11 @@ import org.mapstruct.Mapping;
 public interface PurchaseEntityMapper {
     Purchase toDomain(PurchaseEntity purchaseEntity);
 
-
     @Mapping(target = "purchase", ignore = true)
     PurchaseProduct purchaseProductEntityToPurchaseProduct(PurchaseProductEntity purchaseProductEntity);
 
-
     PurchaseEntity toEntity(Purchase purchase);
+
+    @Mapping(target = "purchase", ignore = true)
+    PurchaseProductEntity purchaseProductToPurchaseProductEntity(PurchaseProduct purchaseProduct);
 }

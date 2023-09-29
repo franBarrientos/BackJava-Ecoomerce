@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface PurchaseRepository {
     Page<Purchase> findAll(Pageable pageable);
+    Page<Purchase> search(Integer dni, String firstName, String lastName, Pageable pageable);
 
     Optional<Purchase> findById(Long id);
 

@@ -1,9 +1,10 @@
 package com.treshermanitos.api.infrastructure.rest.spring.mapper;
 
-import com.treshermanitos.api.domain.Product;
 import com.treshermanitos.api.domain.Purchase;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.ProductDTO;
+import com.treshermanitos.api.domain.PurchaseProduct;
+import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseAddDTO;
 import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseDTO;
+import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseProductAddDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -22,4 +23,5 @@ public interface PurchaseDtoMapper {
     };
 
     Purchase toDomain(PurchaseDTO purchaseDTO);
+
 }

@@ -1,9 +1,9 @@
 package com.treshermanitos.api.infrastructure.rest.spring.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.treshermanitos.api.domain.Customer;
 import com.treshermanitos.api.domain.PaymentMethod;
 import com.treshermanitos.api.domain.PurchaseProduct;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class PurchaseDTO {
     private Date updatedAt;
 
     @JsonIgnoreProperties({"purchase"})
-    private List<PurchaseProduct> purchaseProducts;
+    private List<PurchaseProductDTO> purchaseProducts;
 
     private BigDecimal totalSale;
 }
