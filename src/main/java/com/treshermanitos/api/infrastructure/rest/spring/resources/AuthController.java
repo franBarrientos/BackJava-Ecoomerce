@@ -5,6 +5,7 @@ import com.treshermanitos.api.application.dto.LoginRequest;
 import com.treshermanitos.api.application.dto.LoginResponse;
 import com.treshermanitos.api.application.dto.RegisterRequest;
 import com.treshermanitos.api.application.service.AuthService;
+import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +21,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest body) {
-        return ResponseEntity.ok(authService.register(body));
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest body) {
+        return ApiResponse.oK(authService.register(body));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> register(@RequestBody LoginRequest body) {
-        return ResponseEntity.ok(authService.login(body));
+    public ResponseEntity<ApiResponse> register(@RequestBody LoginRequest body) {
+        return ApiResponse.oK(authService.login(body));
 
     }
 }

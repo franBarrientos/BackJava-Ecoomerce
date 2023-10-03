@@ -1,5 +1,6 @@
 package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
+import com.treshermanitos.api.application.dto.OrderMpAddDTO;
 import com.treshermanitos.api.application.service.PurchaseService;
 import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
 import com.treshermanitos.api.application.service.AuthService;
@@ -88,15 +89,28 @@ public class PurchaseController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> updateOne(@PathVariable(value = "id") long id, @RequestBody PurchaseAddDTO body){
+    public ResponseEntity<ApiResponse> updateOne(@PathVariable(value = "id") long id, @RequestBody PurchaseAddDTO body) {
         return ApiResponse.oK(this.purchaseService.updateById(id, body));
     }
 
 
-   @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> deleteOne(@PathVariable(value = "id") long id){
+    public ResponseEntity<ApiResponse> deleteOne(@PathVariable(value = "id") long id) {
         return ApiResponse.oK(this.purchaseService.deleteById(id));
+    }
+
+    @PostMapping("/create-order-mp")
+    public ResponseEntity<ApiResponse> createOrderMp(@RequestBody OrderMpAddDTO body) {
+        return ApiResponse.oK(this.purchaseService.createOrderMp(body));
+    }
+
+    @PostMapping("/webhook")
+    public ResponseEntity<ApiResponse> recibeWebhookMp(
+            @RequestParam String type,
+            @RequestParam("data.id") Long dataId,
+            @RequestBody Object body) {
+        return ApiResponse.oK(this.purchaseService.handleWebhook(type, dataId, body));
     }
 
 }

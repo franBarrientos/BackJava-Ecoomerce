@@ -15,7 +15,10 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ExceptionsHandler {
-	@ExceptionHandler(NotFoundException.class)
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ApiResponse> internalError(Exception e, HttpServletRequest request) {
+		return ApiResponse.serverError(e.getMessage());
+	}@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<ApiResponse> notFound(NotFoundException e, HttpServletRequest request) {
 		return ApiResponse.notFound(e.getMessage());
 	}

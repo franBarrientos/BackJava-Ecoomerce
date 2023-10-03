@@ -34,7 +34,7 @@ public class CategoryController {
 
         return ApiResponse.oK(
                 CategoryPaginatedResponse.builder()
-                        .categoriesDto(categoryDTOPage.getContent())
+                        .categories(categoryDTOPage.getContent())
                         .totalItems(categoryDTOPage.getNumberOfElements())
                         .totalPages(categoryDTOPage.getTotalPages())
                         .build());

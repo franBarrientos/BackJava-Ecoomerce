@@ -26,6 +26,9 @@ public class ApiResponse {
     public static ResponseEntity<ApiResponse> serverError() {
         return ResponseEntity.status(500).body(new ApiResponse(false, "Uknown", null));
     }
+    public static ResponseEntity<ApiResponse> serverError(Object body) {
+        return ResponseEntity.status(500).body(new ApiResponse(false, body.toString(), null));
+    }
 
     public static ResponseEntity<ApiResponse> badRequest(Object body) {
         return ResponseEntity.status(400).body(new ApiResponse(false, body, null));

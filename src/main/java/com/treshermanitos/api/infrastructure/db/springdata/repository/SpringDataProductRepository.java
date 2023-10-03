@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface SpringDataProductRepository extends JpaRepository<ProductEntity, Long> {
 
-    Page<ProductEntity> findAllByHasStockIsTrue(Pageable pageable);
+    Page<ProductEntity> findByHasStockIsTrueAndCategoryId(Pageable pageable, int categoryId);
 
     Optional<ProductEntity> findByIdAndHasStockIsTrue(Long id);
 

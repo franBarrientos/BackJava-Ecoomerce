@@ -1,11 +1,13 @@
 package com.treshermanitos.api.application.service;
 
 import com.treshermanitos.api.application.exceptions.NotFoundException;
+import com.treshermanitos.api.application.mapper.CustomerDtoMapper;
 import com.treshermanitos.api.application.repository.RoleRepository;
 import com.treshermanitos.api.application.repository.UserRepository;
 import com.treshermanitos.api.infrastructure.config.spring.CustomUserDetails;
 import com.treshermanitos.api.infrastructure.config.spring.JwtService;
 import com.treshermanitos.api.infrastructure.db.springdata.entities.UserEntity;
+import com.treshermanitos.api.infrastructure.db.springdata.mapper.CustomerEntityMapper;
 import com.treshermanitos.api.infrastructure.db.springdata.mapper.RoleEntityMapper;
 import com.treshermanitos.api.infrastructure.db.springdata.mapper.UserEntityMapper;
 import com.treshermanitos.api.application.dto.UserDTO;
@@ -35,6 +37,8 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final RoleEntityMapper roleEntityMapper;
     private final UserEntityMapper userEntityMapper;
+    private final CustomerDtoMapper customerDtoMapper;
+    private final CustomerEntityMapper customerEntityMapper;
 
     public AuthenticationResponse register(RegisterRequest body) {
         var user = UserEntity.builder()
@@ -67,6 +71,8 @@ public class AuthService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
+                .customer(this.customerDtoMapper.toDto
+                        (this.customerEntityMapper.toDomain(user.getCustomer())))
                 .build();
         var jwtToken = jwtService.generateToken(user);
         return new LoginResponse(jwtToken, userDto);

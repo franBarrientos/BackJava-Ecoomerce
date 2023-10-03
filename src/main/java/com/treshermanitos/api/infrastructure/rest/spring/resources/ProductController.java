@@ -21,8 +21,9 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ApiResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "15") int limit) {
-        Page<ProductDTO> products = this.productService.getAll(PageRequest.of(page, limit));
+            @RequestParam(defaultValue = "15") int limit,
+            @RequestParam(defaultValue = "1") int category) {
+        Page<ProductDTO> products = this.productService.getAll(PageRequest.of(page, limit), category);
 
         return ApiResponse.oK(
                 ProductsPaginatedResponse.builder()

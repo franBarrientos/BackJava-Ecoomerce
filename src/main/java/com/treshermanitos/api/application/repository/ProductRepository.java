@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository {
-    Page<Product> findAllByHasStockIsTrue(Pageable pageable);
+    Page<Product> findAllByHasStockIsTrue(Pageable pageable, int categoryId);
 
     Optional<Product> findByIdAndHasStockIsTrue(Long id);
 

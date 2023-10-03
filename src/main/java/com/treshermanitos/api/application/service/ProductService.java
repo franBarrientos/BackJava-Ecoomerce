@@ -20,8 +20,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductDtoMapper productDtoMapper;
 
-    public Page<ProductDTO> getAll(Pageable pageable) {
-        return this.productRepository.findAllByHasStockIsTrue(pageable)
+    public Page<ProductDTO> getAll(Pageable pageable, int categoryId) {
+        return this.productRepository.findAllByHasStockIsTrue(pageable, categoryId)
                 .map(this.productDtoMapper::toDto);
     }
 

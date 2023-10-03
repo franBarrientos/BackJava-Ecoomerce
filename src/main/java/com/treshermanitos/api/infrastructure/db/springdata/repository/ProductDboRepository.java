@@ -21,8 +21,8 @@ public class ProductDboRepository implements ProductRepository {
     private final ProductEntityMapper productEntityMapper;
 
     @Override
-    public Page<Product> findAllByHasStockIsTrue(Pageable pageable) {
-        return this.productRepository.findAllByHasStockIsTrue(pageable)
+    public Page<Product> findAllByHasStockIsTrue(Pageable pageable, int categoryId) {
+        return this.productRepository.findByHasStockIsTrueAndCategoryId(pageable, categoryId)
                 .map(productEntityMapper::toDomain);
     }
 

@@ -9,5 +9,5 @@ import java.util.List;
 @SuperBuilder
 @Data
 public class CategoryPaginatedResponse extends PaginatedResponseBase {
-    private List<CategoryDTO> categoriesDto;
+    private List<CategoryDTO> categories;
 }
