@@ -1,6 +1,10 @@
 package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
-import com.treshermanitos.api.infrastructure.rest.spring.auth.*;
+import com.treshermanitos.api.application.dto.AuthenticationResponse;
+import com.treshermanitos.api.application.dto.LoginRequest;
+import com.treshermanitos.api.application.dto.LoginResponse;
+import com.treshermanitos.api.application.dto.RegisterRequest;
+import com.treshermanitos.api.application.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

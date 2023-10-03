@@ -1,6 +1,8 @@
 package com.treshermanitos.api.application.service;
 
+import com.treshermanitos.api.application.dto.CategoryDTO;
 import com.treshermanitos.api.application.exceptions.NotFoundException;
+import com.treshermanitos.api.application.mapper.CategoryDtoMapper;
 import com.treshermanitos.api.application.repository.CategoryRepository;
 import com.treshermanitos.api.domain.Category;
 import lombok.RequiredArgsConstructor;
@@ -15,20 +17,27 @@ import java.util.Optional;
 
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryDtoMapper categoryDtoMapper;
 
-    public Page<Category> getAll(Pageable pageable){
-        return this.categoryRepository.findAllByStateIsTrue(pageable);
+
+    public Page<CategoryDTO> getAll(Pageable pageable){
+        return this.categoryRepository.findAllByStateIsTrue(pageable)
+                .map(this.categoryDtoMapper::toDto);
     }
 
-    public Category getById(Long id){
-        return this.categoryRepository.findByIdAndStateIsTrue(id)
-                .orElseThrow(()->new NotFoundException("category "+ id+" not found"));
+    public CategoryDTO getById(Long id){
+        return this.categoryDtoMapper.toDto
+                (this.categoryRepository.findByIdAndStateIsTrue(id)
+                .orElseThrow(()->new NotFoundException("category "+ id+" not found")));
     }
 
-    public Category createOne(Category category){
-        return this.categoryRepository.save(category);
+    public CategoryDTO createOne(CategoryDTO category){
+        return this.categoryDtoMapper.toDto
+                (this.categoryRepository.save
+                        (this.categoryDtoMapper.toDomain(category)));
     }
-    public Category updateById(Long id, Category category){
+
+    public CategoryDTO updateById(Long id, CategoryDTO category){
         Category categoryToUpdate = this.categoryRepository.findByIdAndStateIsTrue(id)
                 .orElseThrow(() -> new NotFoundException("category " + id + " not found "));
         if (category.getImg() != null) {
@@ -40,14 +49,16 @@ public class CategoryService {
             categoryToUpdate.setName(category.getName());
         }
 
-        return this.categoryRepository.save(categoryToUpdate);
+        return this.categoryDtoMapper.toDto
+                (this.categoryRepository.save(categoryToUpdate));
     }
 
-    public void deleteById(Long id){
+    public String deleteById(Long id){
         Category category = this.categoryRepository.findByIdAndStateIsTrue(id)
                 .orElseThrow(() -> new NotFoundException("category " + id + " not found "));
         category.setState(false);
         this.categoryRepository.save(category);
+        return "Category " + id + " deleted";
     }
 
 }

@@ -1,8 +1,6 @@
-package com.treshermanitos.api.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

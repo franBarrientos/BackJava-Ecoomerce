@@ -1,13 +1,18 @@
-package com.treshermanitos.api.infrastructure.rest.spring.auth;
+package com.treshermanitos.api.application.service;
 
 import com.treshermanitos.api.application.exceptions.NotFoundException;
 import com.treshermanitos.api.application.repository.RoleRepository;
 import com.treshermanitos.api.application.repository.UserRepository;
+import com.treshermanitos.api.infrastructure.config.spring.CustomUserDetails;
 import com.treshermanitos.api.infrastructure.config.spring.JwtService;
 import com.treshermanitos.api.infrastructure.db.springdata.entities.UserEntity;
 import com.treshermanitos.api.infrastructure.db.springdata.mapper.RoleEntityMapper;
 import com.treshermanitos.api.infrastructure.db.springdata.mapper.UserEntityMapper;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
+import com.treshermanitos.api.application.dto.UserDTO;
+import com.treshermanitos.api.application.dto.AuthenticationResponse;
+import com.treshermanitos.api.application.dto.LoginRequest;
+import com.treshermanitos.api.application.dto.LoginResponse;
+import com.treshermanitos.api.application.dto.RegisterRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -73,7 +78,8 @@ public class AuthService {
                 authentication.getAuthorities().stream()
                         .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        Boolean idParamIsEqualIdUserAuthenticated = (id == ((UserEntity) authentication.getPrincipal()).getId());
+        Boolean idParamIsEqualIdUserAuthenticated =
+                (id == ((CustomUserDetails) authentication.getPrincipal()).getUser().getId());
 
         if (!hasPermissionToGetAll && !idParamIsEqualIdUserAuthenticated) {
             throw new AccessDeniedException("403");

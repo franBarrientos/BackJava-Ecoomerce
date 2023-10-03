@@ -2,16 +2,15 @@ package com.treshermanitos.api.infrastructure.db.springdata.repository;
 
 import com.treshermanitos.api.application.repository.CategoryRepository;
 import com.treshermanitos.api.domain.Category;
-import com.treshermanitos.api.domain.User;
+import com.treshermanitos.api.application.dto.StadisticsCategory;
 import com.treshermanitos.api.infrastructure.db.springdata.entities.CategoryEntity;
-import com.treshermanitos.api.infrastructure.db.springdata.entities.UserEntity;
 import com.treshermanitos.api.infrastructure.db.springdata.mapper.CategoryEntityMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +39,12 @@ public class CategoryDboRepository implements CategoryRepository {
     public Category save(Category category) {
         return this.categoryEntityMapper.toDomain(
                 this.categoryRepository.save(this.categoryEntityMapper.toEntity(category)));
+    }
+
+    @Override
+    public List<StadisticsCategory> get5mostSales() {
+         var pp = this.categoryRepository.get5mostSales();
+        return pp;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.treshermanitos.api.infrastructure.rest.spring.response;
 
 import java.util.List;
 
-import com.treshermanitos.api.infrastructure.rest.spring.dto.CustomerDTO;
+import com.treshermanitos.api.application.dto.CustomerDTO;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

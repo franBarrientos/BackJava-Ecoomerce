@@ -1,7 +1,7 @@
-package com.treshermanitos.api.infrastructure.rest.spring.mapper;
+package com.treshermanitos.api.application.mapper;
 
 import com.treshermanitos.api.domain.User;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
+import com.treshermanitos.api.application.dto.UserDTO;
 
 import org.mapstruct.Mapper;
 

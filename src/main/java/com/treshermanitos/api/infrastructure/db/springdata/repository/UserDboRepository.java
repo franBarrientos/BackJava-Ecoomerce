@@ -19,6 +19,7 @@ public class UserDboRepository implements UserRepository {
 
     private final SpringDataUserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
+
     @Override
     public Page<User> findAll(Pageable pageable) {
         return this.userRepository.findAll(pageable)
@@ -28,7 +29,7 @@ public class UserDboRepository implements UserRepository {
     @Override
     public Optional<User> findById(Long id) {
         Optional<UserEntity> user = this.userRepository.findById(id);
-        return user.isPresent()?
+        return user.isPresent() ?
                 Optional.of(userEntityMapper.toDomain(user.get()))
                 :
                 Optional.empty();
@@ -38,7 +39,7 @@ public class UserDboRepository implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         Optional<UserEntity> user = this.userRepository.findByEmail(email);
-        return user.isPresent()?
+        return user.isPresent() ?
                 Optional.of(userEntityMapper.toDomain(user.get()))
                 :
                 Optional.empty();
@@ -54,7 +55,7 @@ public class UserDboRepository implements UserRepository {
     @Override
     public Optional<User> findUserIsActive(Long id) {
         Optional<UserEntity> user = this.userRepository.findByIdAndStateIsTrue(id);
-        return user.isPresent()?
+        return user.isPresent() ?
                 Optional.of(userEntityMapper.toDomain(user.get()))
                 :
                 Optional.empty();
@@ -63,24 +64,43 @@ public class UserDboRepository implements UserRepository {
     @Override
     public boolean deleteById(Long id) {
         Optional<UserEntity> userEntity = this.userRepository.findByIdAndStateIsTrue(id);
-        if (userEntity.isPresent()){
+        if (userEntity.isPresent()) {
             User user = this.userEntityMapper.toDomain(userEntity.get());
             user.setState(false);
             this.userRepository.save(this.userEntityMapper.toEntity(user));
             return true;
-        }else {
+        } else {
             return false;
         }
 
     }
+
+    @Override
+    public Optional<User> updateById(Long id, User userToUpdate) {
+        Optional<UserEntity> user = this.userRepository.findByIdAndStateIsTrue(id);
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+        if (userToUpdate.getAge() != null) {
+            user.get().setAge(userToUpdate.getAge());
+        }
+        if (userToUpdate.getCity() != null) {
+            user.get().setCity(userToUpdate.getCity());
+        }
+        if (userToUpdate.getProvince() != null) {
+            user.get().setProvince(userToUpdate.getProvince());
+        }
+        if (userToUpdate.getFirstName() != null) {
+            user.get().setFirstName(userToUpdate.getFirstName());
+        }
+        if (userToUpdate.getLastName() != null) {
+            user.get().setLastName(userToUpdate.getLastName());
+        }
+        return Optional.of(
+                this.userEntityMapper.toDomain(
+                        this.userRepository.save(user.get())));
+
+    }
 }
-  /*  Optional<User> findByEmail(String email);
 
-    Optional<User> findByIdAndStateIsTrue(Long id);
-
-    @Query("SELECT new com.treshermanitos.api.user.dto.UserDTO( " +
-            "u.id, u.firstName, u.lastName, u.email, u.city, u.age, " +
-            "u.province, u.customer.id, u.customer.dni, u.customer.addres, " +
-            "u.customer.phone) FROM User u LEFT JOIN u.customer WHERE u.state = true ")
-    Page<UserDTO> findAllUsersAsDtos(Pageable pageable);*/
 

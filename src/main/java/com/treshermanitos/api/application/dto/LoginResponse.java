@@ -1,6 +1,6 @@
-package com.treshermanitos.api.infrastructure.rest.spring.auth;
+package com.treshermanitos.api.application.dto;
 
-import com.treshermanitos.api.infrastructure.rest.spring.dto.UserDTO;
+import com.treshermanitos.api.application.dto.UserDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

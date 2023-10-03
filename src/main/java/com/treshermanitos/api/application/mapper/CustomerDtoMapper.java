@@ -1,7 +1,7 @@
-package com.treshermanitos.api.infrastructure.rest.spring.mapper;
+package com.treshermanitos.api.application.mapper;
 
 import com.treshermanitos.api.domain.Customer;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.CustomerDTO;
+import com.treshermanitos.api.application.dto.CustomerDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

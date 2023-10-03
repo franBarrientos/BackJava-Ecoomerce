@@ -1,7 +1,5 @@
-package com.treshermanitos.api.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.application.dto;
 
-import com.treshermanitos.api.domain.Product;
-import com.treshermanitos.api.domain.Purchase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -29,7 +29,7 @@ public class PrivilegeDboRepository implements PrivilegeRepository {
     @Override
     public Privilege save(Privilege privilege) {
         return this.privilegeEntityMapper
-                .toDomain(this.privilegeEntityMapper
-                        .toEntity(privilege));
+                .toDomain(this.dataPrivilegeRepository
+                        .save(this.privilegeEntityMapper.toEntity(privilege)));
     }
 }

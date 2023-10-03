@@ -2,6 +2,7 @@ package com.treshermanitos.api.infrastructure.db.springdata.repository;
 
 import com.treshermanitos.api.application.repository.ProductRepository;
 import com.treshermanitos.api.domain.Product;
+import com.treshermanitos.api.application.dto.StadisticsProducts;
 import com.treshermanitos.api.infrastructure.db.springdata.entities.ProductEntity;
 import com.treshermanitos.api.infrastructure.db.springdata.mapper.ProductEntityMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +35,11 @@ public class ProductDboRepository implements ProductRepository {
                 :
                 Optional.empty();
 
+    }
+
+    @Override
+    public List<StadisticsProducts> get5mostSales() {
+        return this.productRepository.get5ProductsMostSales();
     }
 
     @Override

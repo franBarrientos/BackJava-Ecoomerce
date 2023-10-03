@@ -1,4 +1,4 @@
-package com.treshermanitos.api.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.application.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

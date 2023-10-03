@@ -18,8 +18,7 @@ public interface UserRepository {
     Optional<User> findUserIsActive(Long id);
 
     boolean deleteById(Long id);
-
-
+    Optional<User> updateById(Long id, User user);
 
 
 }

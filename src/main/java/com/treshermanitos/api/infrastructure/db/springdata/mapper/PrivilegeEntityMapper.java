@@ -18,4 +18,8 @@ public interface PrivilegeEntityMapper {
 
     PrivilegeEntity toEntity(Privilege privilege);
 
-}
+
+    RoleEntity roleToRoleEntity(Role role);
+
+
+    }

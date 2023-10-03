@@ -1,6 +1,8 @@
 package com.treshermanitos.api.application.service;
 
+import com.treshermanitos.api.application.dto.ProductDTO;
 import com.treshermanitos.api.application.exceptions.NotFoundException;
+import com.treshermanitos.api.application.mapper.ProductDtoMapper;
 import com.treshermanitos.api.application.repository.CategoryRepository;
 import com.treshermanitos.api.application.repository.ProductRepository;
 import com.treshermanitos.api.domain.Category;
@@ -16,20 +18,25 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductDtoMapper productDtoMapper;
 
-    public Page<Product> getAll(Pageable pageable) {
-        return this.productRepository.findAllByHasStockIsTrue(pageable);
+    public Page<ProductDTO> getAll(Pageable pageable) {
+        return this.productRepository.findAllByHasStockIsTrue(pageable)
+                .map(this.productDtoMapper::toDto);
     }
 
-    public Product getById(Long idLong) {
-        return this.productRepository.findByIdAndHasStockIsTrue(idLong)
-                .orElseThrow(() -> new NotFoundException(" Product " + idLong + " not found"));
+    public ProductDTO getById(Long idLong) {
+        return this.productDtoMapper.toDto
+                (this.productRepository.findByIdAndHasStockIsTrue(idLong)
+                .orElseThrow(() -> new NotFoundException(" Product " + idLong + " not found")));
     }
 
-    public Product createOne(Product product){
+    public ProductDTO createOne(ProductDTO product){
         Category category = this.categoryRepository.findByIdAndStateIsTrue(product.getCategory().getId())
                 .orElseThrow(() -> new NotFoundException(" Category " + product.getCategory() + " not found"));
-        return this.productRepository.save(product);
+
+        return this.productDtoMapper.toDto
+                (this.productRepository.save(this.productDtoMapper.toDomain(product)));
     }
 
 }

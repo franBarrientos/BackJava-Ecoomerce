@@ -10,6 +10,7 @@ import com.treshermanitos.api.infrastructure.db.springdata.entities.PrivilegeEnt
 import com.treshermanitos.api.infrastructure.db.springdata.entities.RoleEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -28,39 +29,84 @@ public class SetupDataLoader implements
     private final RoleEntityMapper roleEntityMapper;
     private final PrivilegeEntityMapper privilegeEntityMapper;
 
+    @Value("${DB_URL}")
+    private String url;
+
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (this.alreadySetup)
-            return;
-        //admin
-        PrivilegeEntity readPrivilegeAdminEntity
-                = createPrivilegeIfNotFound("ADMIN:READ");
-        PrivilegeEntity writePrivilegeAdminEntity
-                = createPrivilegeIfNotFound("ADMIN:WRITE");
-        PrivilegeEntity updatePrivilegeAdminEntity
-                = createPrivilegeIfNotFound("ADMIN:UPDATE");
-        PrivilegeEntity deletePrivilegeAdminEntity
-                = createPrivilegeIfNotFound("ADMIN:DELETE");
-        PrivilegeEntity DASDASDSA
-                = createPrivilegeIfNotFound("ADMIN:DELETE");
-        Set<PrivilegeEntity> pps = new HashSet<>(){{
-            add(readPrivilegeAdminEntity);
-            add(writePrivilegeAdminEntity);
-            add(updatePrivilegeAdminEntity);
-            add(deletePrivilegeAdminEntity);
-        }};
 
+        if (this.alreadySetup){
+            return;
+        }
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+        System.out.println(url);
+                    //admin
+        PrivilegeEntity readPrivilegeAdminEntity
+                = this.createPrivilegeIfNotFound("ADMIN:READ");
+        PrivilegeEntity writePrivilegeAdminEntity
+                = this.createPrivilegeIfNotFound("ADMIN:WRITE");
+        PrivilegeEntity updatePrivilegeAdminEntity
+                = this.createPrivilegeIfNotFound("ADMIN:UPDATE");
+        PrivilegeEntity deletePrivilegeAdminEntity
+                = this.createPrivilegeIfNotFound("ADMIN:DELETE");
 
 
         PrivilegeEntity readPrivilegeUserEntity
-                = createPrivilegeIfNotFound("USER:READ");
+                = this.createPrivilegeIfNotFound("USER:READ");
         PrivilegeEntity writePrivilegeUserEntity
-                = createPrivilegeIfNotFound("USER:WRITE");
+                = this.createPrivilegeIfNotFound("USER:WRITE");
         PrivilegeEntity updatePrivilegeUserEntity
-                = createPrivilegeIfNotFound("USER:UPDATE");
+                = this.createPrivilegeIfNotFound("USER:UPDATE");
         PrivilegeEntity deletePrivilegeUserEntity
-                = createPrivilegeIfNotFound("USER:DELETE");
+                = this.createPrivilegeIfNotFound("USER:DELETE");
+
+        PrivilegeEntity readPrivilegeCustomerEntity
+                = this.createPrivilegeIfNotFound("CUSTOMER:READ");
+        PrivilegeEntity writePrivilegeCustomerEntity
+                = this.createPrivilegeIfNotFound("CUSTOMER:WRITE");
+        PrivilegeEntity updatePrivilegeCustomerEntity
+                = this.createPrivilegeIfNotFound("CUSTOMER:UPDATE");
+        PrivilegeEntity deletePrivilegeCustomerEntity
+                = this.createPrivilegeIfNotFound("CUSTOMER:DELETE");
 
 
         List<PrivilegeEntity> adminPrivilegeEntities = List.of(
@@ -75,34 +121,31 @@ public class SetupDataLoader implements
                 updatePrivilegeUserEntity,
                 deletePrivilegeUserEntity);
 
-        createRoleIfNotFound("ROLE_ADMIN", adminPrivilegeEntities);
-        createRoleIfNotFound("ROLE_USER", userPrivilegeEntities);
-/*
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-        User user = new User();
-        user.setFirstName("Test");
-        user.setLastName("Test");
-        user.setPassword(passwordEncoder.encode("test"));
-        user.setEmail("test@test.com");
-        user.setRoles(Arrays.asList(adminRole));
-        user.setEnabled(true);
-        userRepository.save(user);*/
+        List<PrivilegeEntity> customerPrivilegeEntities = List.of(
+                readPrivilegeCustomerEntity,
+                writePrivilegeCustomerEntity,
+                updatePrivilegeCustomerEntity,
+                deletePrivilegeCustomerEntity);
 
-        alreadySetup = true;
+        this.createRoleIfNotFound("ROLE_ADMIN", adminPrivilegeEntities);
+        this.createRoleIfNotFound("ROLE_USER", userPrivilegeEntities);
+        this.createRoleIfNotFound("ROLE_CUSTOMER", customerPrivilegeEntities);
+
+        this.alreadySetup = true;
     }
 
 
     @Transactional
     public PrivilegeEntity createPrivilegeIfNotFound(String name) {
 
-        Optional<Privilege> privilegeEntity = privilegeRepository
+        Optional<Privilege> privilegeEntity = this.privilegeRepository
                 .findPrivilegeByName(name);
 
         if (privilegeEntity.isEmpty()) {
             Privilege privilegeNew = new Privilege(name);
             return this.privilegeEntityMapper
-                    .toEntity(privilegeRepository.save(privilegeNew));
-        }else {
+                    .toEntity(this.privilegeRepository.save(privilegeNew));
+        } else {
             return this.privilegeEntityMapper
                     .toEntity(privilegeEntity.get());
         }
@@ -114,7 +157,7 @@ public class SetupDataLoader implements
     public RoleEntity createRoleIfNotFound(
             String name, Collection<PrivilegeEntity> privilegeEntities) {
 
-        Optional<Role> role = roleRepository.findRoleByName(name);
+        Optional<Role> role = this.roleRepository.findRoleByName(name);
 
         if (role.isEmpty()) {
             Role roleNew = new Role(name, privilegeEntities
@@ -124,7 +167,7 @@ public class SetupDataLoader implements
             );
             return this.roleEntityMapper
                     .toEntity(this.roleRepository.save(roleNew));
-        }else {
+        } else {
             return this.roleEntityMapper.toEntity(role.get());
         }
     }

@@ -1,7 +1,9 @@
 package com.treshermanitos.api.application.service;
 
+import com.treshermanitos.api.application.dto.CustomerDTO;
 import com.treshermanitos.api.application.exceptions.NotFoundException;
 import com.treshermanitos.api.application.exceptions.RelationshipAlreadyExist;
+import com.treshermanitos.api.application.mapper.CustomerDtoMapper;
 import com.treshermanitos.api.application.repository.CustomerRepository;
 import com.treshermanitos.api.application.repository.UserRepository;
 import com.treshermanitos.api.domain.Customer;
@@ -18,20 +20,24 @@ import java.util.Optional;
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
+    private final CustomerDtoMapper customerDtoMapper;
 
 
 
-    public Page<Customer> getAll(Pageable pageable){
-        return this.customerRepository.findAllActiveCustomers(pageable);
+
+    public Page<CustomerDTO> getAll(Pageable pageable){
+        return this.customerRepository.findAllActiveCustomers(pageable)
+                .map(this.customerDtoMapper::toDto);
     }
 
-    public Customer getById(Long id){
-        return this.customerRepository
+    public CustomerDTO getById(Long id){
+        return this.customerDtoMapper.toDto
+                (this.customerRepository
                 .findActiveCustomer(id)
-                .orElseThrow(() -> new NotFoundException(" customer " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(" customer " + id + " not found")));
     }
 
-    public Customer createOne(Customer customer){
+    public CustomerDTO createOne(CustomerDTO customer){
         User user = this.userRepository.findUserIsActive(customer.getUser().getId())
                 .orElseThrow(() -> new NotFoundException(" user " + customer.getUser() + " not found"));
 
@@ -39,28 +45,30 @@ public class CustomerService {
             throw new RelationshipAlreadyExist("can not create a relationship one to one already exist!.");
         }
 
-        return this.customerRepository.save(customer);
+        return this.customerDtoMapper.toDto
+                (this.customerRepository.save(this.customerDtoMapper.toDomain(customer)));
     }
 
-    public Customer updateById(Long id, Customer customer){
+    public CustomerDTO updateById(Long id, CustomerDTO customer){
         Customer customerToUpdate = this.customerRepository.findActiveCustomer(id)
                 .orElseThrow(() -> new NotFoundException("customer " + id + " not found "));
 
         if (customer.getDni() != null) {
-            customer.setDni(customer.getDni());
+            customerToUpdate.setDni(customer.getDni());
         }
 
 
         if (customer.getAddres() != null) {
-            customer.setAddres(customer.getAddres());
+            customerToUpdate.setAddres(customer.getAddres());
         }
 
 
         if (customer.getPhone() != null) {
-            customer.setPhone(customer.getPhone());
+            customerToUpdate.setPhone(customer.getPhone());
         }
 
-        return this.customerRepository.save(customer);
+        return this.customerDtoMapper.toDto
+                (this.customerRepository.save(customerToUpdate));
 
     }
 

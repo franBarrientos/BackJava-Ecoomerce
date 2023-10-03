@@ -1,9 +1,7 @@
-package com.treshermanitos.api.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.treshermanitos.api.domain.PaymentMethod;
-import com.treshermanitos.api.domain.PurchaseProduct;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

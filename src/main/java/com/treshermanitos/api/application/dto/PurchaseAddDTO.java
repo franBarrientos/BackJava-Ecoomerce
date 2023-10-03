@@ -1,4 +1,4 @@
-package com.treshermanitos.api.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.application.dto;
 
 import com.treshermanitos.api.domain.PaymentMethod;
 import jakarta.validation.constraints.NotNull;

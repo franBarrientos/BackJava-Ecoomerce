@@ -1,11 +1,10 @@
 package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.treshermanitos.api.application.service.CategoryService;
 import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
-import com.treshermanitos.api.infrastructure.rest.spring.auth.AuthService;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.CategoryDTO;
-import com.treshermanitos.api.infrastructure.rest.spring.mapper.CategoryDtoMapper;
+import com.treshermanitos.api.application.service.AuthService;
+import com.treshermanitos.api.application.dto.CategoryDTO;
+import com.treshermanitos.api.application.mapper.CategoryDtoMapper;
 import com.treshermanitos.api.infrastructure.rest.spring.response.CategoryPaginatedResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final CategoryDtoMapper categoryDtoMapper;
 
 
     @GetMapping
@@ -32,8 +30,7 @@ public class CategoryController {
             @RequestParam(defaultValue = "15") int limit) {
 
         Page<CategoryDTO> categoryDTOPage =
-                this.categoryService.getAll(PageRequest.of(page, limit))
-                        .map(categoryDtoMapper::toDto);
+                this.categoryService.getAll(PageRequest.of(page, limit));
 
         return ApiResponse.oK(
                 CategoryPaginatedResponse.builder()
@@ -48,20 +45,14 @@ public class CategoryController {
                                                Authentication authentication) {
         //if isn't admin user or the same user authenticated, throw 403
         AuthService.checkIfAdminOrSameUser(id, authentication);
-        return ApiResponse.oK(
-                this.categoryDtoMapper.toDto(
-                        this.categoryService.getById(id)
-                ));
+        return ApiResponse.oK(this.categoryService.getById(id));
     }
 
     @PostMapping()
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse> createOne(@Valid @RequestBody CategoryDTO body) {
         //if isn't admin user or the same user authenticated, throw 403
-        return ApiResponse.oK(
-                this.categoryDtoMapper.toDto(
-                        this.categoryService.createOne(
-                                this.categoryDtoMapper.toDomain(body))));
+        return ApiResponse.oK(this.categoryService.createOne(body));
     }
 
     @PutMapping("/{id}")
@@ -69,18 +60,16 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> updateById(@PathVariable(value = "id") Long id,
                                                   @RequestBody CategoryDTO body,
                                                   Authentication authentication) {
+
         //if isn't admin user or the same user authenticated, throw 403
         AuthService.checkIfAdminOrSameUser(id, authentication);
-        return ApiResponse.oK(
-                this.categoryDtoMapper.toDto(
-                        this.categoryService.updateById(id, this.categoryDtoMapper.toDomain(body))));
+        return ApiResponse.oK(this.categoryService.updateById(id, body));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteById(@PathVariable(value = "id") Long id) {
-        this.categoryService.deleteById(id);
-        return ApiResponse.oK("Category " + id + " deleted");
+        return ApiResponse.oK(this.categoryService.deleteById(id));
     }
 
 

@@ -1,17 +1,14 @@
 package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
 import com.treshermanitos.api.application.service.ProductService;
-import com.treshermanitos.api.domain.Product;
 import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.ProductDTO;
-import com.treshermanitos.api.infrastructure.rest.spring.mapper.ProductDtoMapper;
+import com.treshermanitos.api.application.dto.ProductDTO;
+import com.treshermanitos.api.application.mapper.ProductDtoMapper;
 import com.treshermanitos.api.infrastructure.rest.spring.response.ProductsPaginatedResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    private final ProductDtoMapper productDtoMapper;
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int limit) {
-        Page<ProductDTO> products = this.productService.getAll(PageRequest.of(page, limit))
-                .map(productDtoMapper::toDto);
+        Page<ProductDTO> products = this.productService.getAll(PageRequest.of(page, limit));
 
         return ApiResponse.oK(
                 ProductsPaginatedResponse.builder()
@@ -40,7 +35,8 @@ public class ProductController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id, Authentication authentication) {
+    public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id,
+                                               Authentication authentication) {
         return ApiResponse.oK(this.productService.getById(id));
     }
 
@@ -49,7 +45,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> createOne(@Valid @RequestBody ProductDTO body){
         return ApiResponse.oK(this.productService.createOne(
-                this.productDtoMapper.toDomain(
+                this.productDtoMapper.purchaseAddDTOtoDomain(
                 body)));
     }
     @PutMapping("/{id}")

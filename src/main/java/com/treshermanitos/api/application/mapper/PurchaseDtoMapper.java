@@ -1,10 +1,7 @@
-package com.treshermanitos.api.infrastructure.rest.spring.mapper;
+package com.treshermanitos.api.application.mapper;
 
 import com.treshermanitos.api.domain.Purchase;
-import com.treshermanitos.api.domain.PurchaseProduct;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseAddDTO;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseDTO;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseProductAddDTO;
+import com.treshermanitos.api.application.dto.PurchaseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

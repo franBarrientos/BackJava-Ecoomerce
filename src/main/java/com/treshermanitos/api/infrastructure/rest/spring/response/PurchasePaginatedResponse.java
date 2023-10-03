@@ -1,8 +1,6 @@
 package com.treshermanitos.api.infrastructure.rest.spring.response;
 
-import com.treshermanitos.api.domain.Purchase;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.CategoryDTO;
-import com.treshermanitos.api.infrastructure.rest.spring.dto.PurchaseDTO;
+import com.treshermanitos.api.application.dto.PurchaseDTO;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

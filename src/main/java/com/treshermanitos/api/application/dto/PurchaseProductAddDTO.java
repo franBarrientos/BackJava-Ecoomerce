@@ -1,4 +1,4 @@
-package com.treshermanitos.api.infrastructure.rest.spring.dto;
+package com.treshermanitos.api.application.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
