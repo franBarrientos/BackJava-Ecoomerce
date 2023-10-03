@@ -1,8 +1,0 @@
-services:
-  - name: my-app
-    builder: docker
-    command: java -jar app.jar
-    env:
-    # Define tus variables de entorno si es necesario
-    ports:
-      - 8080:8080
