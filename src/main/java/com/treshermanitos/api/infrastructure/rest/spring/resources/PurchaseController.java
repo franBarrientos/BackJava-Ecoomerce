@@ -106,11 +106,11 @@ public class PurchaseController {
     }
 
     @PostMapping("/webhook")
-    public ResponseEntity<ApiResponse> recibeWebhookMp(
+    public void recibeWebhookMp(
             @RequestParam String type,
             @RequestParam("data.id") Long dataId,
             @RequestBody Object body) {
-        return ApiResponse.oK(this.purchaseService.handleWebhook(type, dataId, body));
+        this.purchaseService.handleWebhook(type, dataId, body);
     }
 
 }

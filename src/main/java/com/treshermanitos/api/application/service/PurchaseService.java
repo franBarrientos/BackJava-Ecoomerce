@@ -186,7 +186,7 @@ public class PurchaseService {
         }
     }
 
-    public Object handleWebhook(String type, Long dataId, Object body) {
+    public void handleWebhook(String type, Long dataId, Object body) {
         try {
             System.out.println("type " + type);
             System.out.println("dataId " + dataId);
@@ -203,10 +203,8 @@ public class PurchaseService {
                     purchase.setState("paid");
 
                     this.purchaseRepository.save(purchase);
-                    return "Ok";
                 }
             }
-            return "Webhook handled successfully";
         } catch (MPApiException ex) {
             System.out.printf(
                     "MercadoPago Error. Status: %s, Content: %s%n",

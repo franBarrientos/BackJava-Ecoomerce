@@ -1,23 +1,14 @@
 package com.treshermanitos.api.application.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder @Data
-public class ProductDTO {
-
-    private Long id;
-
+@Data
+public class ProductAddDTO {
     @NotEmpty
     private  String name;
 
@@ -28,14 +19,13 @@ public class ProductDTO {
     private BigDecimal price;
 
     @NotNull
-    private CategoryDTO category;
+    private Long category;
 
-    private  String img;
+    @NotNull
+    private MultipartFile img;
 
     @NotNull
     private Long stock;
-
-    private Boolean hasStock;
 
     private Boolean fav;
 }

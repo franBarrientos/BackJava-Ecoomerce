@@ -48,22 +48,22 @@ public class ProductEntity {
 
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<PurchaseProductEntity> purchaseProducts;
-
-
     @PrePersist
     private void prePersist() {
         if (this.getStock() == null) {
             this.setStock(1l);
         }
-        setCreatedAt(new Date());
-        setUpdatedAt(getCreatedAt());
+        if (this.getFav() == null) {
+            this.setFav(false);
+        }
+        this.setHasStock(true);
+        this.setCreatedAt(new Date());
+        this.setUpdatedAt(this.getCreatedAt());
     }
 
     @PreUpdate
     protected void onUpdate() {
-        setUpdatedAt(new Date());
+        this.setUpdatedAt(new Date());
     }
 
 

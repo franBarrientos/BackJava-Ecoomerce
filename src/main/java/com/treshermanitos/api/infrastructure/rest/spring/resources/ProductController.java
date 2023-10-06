@@ -1,15 +1,15 @@
 package com.treshermanitos.api.infrastructure.rest.spring.resources;
 
+import com.treshermanitos.api.application.dto.ProductAddDTO;
+import com.treshermanitos.api.application.dto.ProductDTO;
 import com.treshermanitos.api.application.service.ProductService;
 import com.treshermanitos.api.infrastructure.config.spring.ApiResponse;
-import com.treshermanitos.api.application.dto.ProductDTO;
-import com.treshermanitos.api.application.mapper.ProductDtoMapper;
 import com.treshermanitos.api.infrastructure.rest.spring.response.ProductsPaginatedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,34 +31,33 @@ public class ProductController {
                         .totalPages(products.getTotalPages())
                         .totalItems(products.getNumberOfElements())
                         .build()
-                );
+        );
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id,
-                                               Authentication authentication) {
+    public ResponseEntity<ApiResponse> getById(@PathVariable(value = "id") long id) {
         return ApiResponse.oK(this.productService.getById(id));
     }
 
-
-/*    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> createOne(@Valid @RequestBody ProductDTO body){
-        return ApiResponse.oK(this.productService.createOne(
-                this.productDtoMapper.purchaseAddDTOtoDomain(
-                body)));
+    @PostMapping
+    public ResponseEntity<ApiResponse> createOne(@ModelAttribute ProductAddDTO productAddDTO) {
+        return ApiResponse.oK(this.productService.createOne(productAddDTO));
     }
-    @PutMapping("/{id}")
+
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> updateOne(@PathVariable(value = "id") long id, @RequestBody ProductDTO body){
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateOne(@PathVariable(value = "id") long id,
+                                                 @ModelAttribute ProductAddDTO body){
         return ApiResponse.oK(this.productService.updateById(id, body));
     }
+
+
    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteOne(@PathVariable(value = "id") long id){
-        this.productService.deleteById(id);
-        return ApiResponse.oK("Product "+id+" deleted");
-    }*/
+        return ApiResponse.oK( this.productService.deleteById(id));
+    }
 
 }

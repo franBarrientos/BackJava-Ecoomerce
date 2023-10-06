@@ -29,9 +29,6 @@ public class CategoryEntity {
 
     private Boolean state;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private Set<ProductEntity> products;
-
     @PrePersist
     private void prePersist() {
         if (getState() == null) {

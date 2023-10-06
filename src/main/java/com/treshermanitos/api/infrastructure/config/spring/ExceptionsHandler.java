@@ -2,6 +2,7 @@ package com.treshermanitos.api.infrastructure.config.spring;
 
 import java.util.stream.Collectors;
 
+import com.treshermanitos.api.application.exceptions.Unathorized;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +41,10 @@ public class ExceptionsHandler {
 	@ExceptionHandler(RelationshipAlreadyExist.class)
 	public ResponseEntity<ApiResponse> relationshipAlreadyExist(RelationshipAlreadyExist e, HttpServletRequest request) {
 		return ApiResponse.badRequest(e.getMessage());
+	}
+	@ExceptionHandler(Unathorized.class)
+	public ResponseEntity<ApiResponse> relationshipAlreadyExist(Unathorized e, HttpServletRequest request) {
+		return ApiResponse.unathorized(e.getMessage());
 	}
 
 }

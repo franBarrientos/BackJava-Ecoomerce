@@ -13,8 +13,5 @@ public interface CategoryEntityMapper {
 
     Category toDomain(CategoryEntity customerEntity);
 
-    @Mapping(target = "category", ignore = true)
-    Product toDomain(ProductEntity productEntity);
-
     CategoryEntity toEntity(Category customer);
 }

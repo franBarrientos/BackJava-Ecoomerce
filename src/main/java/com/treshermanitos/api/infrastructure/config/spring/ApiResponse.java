@@ -33,6 +33,9 @@ public class ApiResponse {
     public static ResponseEntity<ApiResponse> badRequest(Object body) {
         return ResponseEntity.status(400).body(new ApiResponse(false, body, null));
     }
+    public static ResponseEntity<ApiResponse> unathorized(Object body) {
+        return ResponseEntity.status(401).body(new ApiResponse(false, body, null));
+    }
 
     // Getters and setters
     public boolean isOk() {

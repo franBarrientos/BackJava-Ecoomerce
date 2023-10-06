@@ -43,8 +43,7 @@ public class CategoryDboRepository implements CategoryRepository {
 
     @Override
     public List<StadisticsCategory> get5mostSales() {
-         var pp = this.categoryRepository.get5mostSales();
-        return pp;
+        return this.categoryRepository.get5mostSales();
     }
 
     @Override

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -26,8 +28,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> register(@RequestBody LoginRequest body) {
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest body) {
         return ApiResponse.oK(authService.login(body));
+
+    }
+    @PostMapping("/google")
+    public ResponseEntity<ApiResponse> loginGoogle(@RequestBody Map body) {
+        return ApiResponse.oK(authService.loginGoogle(body));
 
     }
 }

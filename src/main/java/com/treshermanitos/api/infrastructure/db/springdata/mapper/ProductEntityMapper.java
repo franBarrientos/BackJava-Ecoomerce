@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProductEntityMapper {
 
-    @Mapping(target = "category.products", ignore = true)
     Product toDomain(ProductEntity entity);
 
 

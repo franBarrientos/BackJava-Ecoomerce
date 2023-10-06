@@ -17,7 +17,8 @@ public interface SpringDataProductRepository extends JpaRepository<ProductEntity
     Optional<ProductEntity> findByIdAndHasStockIsTrue(Long id);
 
     @Query(value = "SELECT new com.treshermanitos.api.application.dto.StadisticsProducts( " +
-            "p.id, p.name, SUM(pp.quantity)) FROM Product p JOIN p.purchaseProducts pp " +
+            "p.id, p.name, SUM(pp.quantity)) FROM Product p " +
+            " JOIN PurchaseProduct pp ON p.id = pp.product.id " +
             "GROUP BY p.id ORDER BY SUM(pp.quantity) DESC LIMIT 5")
     List<StadisticsProducts> get5ProductsMostSales();
 

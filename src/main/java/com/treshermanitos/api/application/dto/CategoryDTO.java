@@ -19,8 +19,6 @@ public class CategoryDTO {
     @NotEmpty
     private String img;
 
-    private Set<ProductDTO> products;
-
     private Boolean state;
 
 }

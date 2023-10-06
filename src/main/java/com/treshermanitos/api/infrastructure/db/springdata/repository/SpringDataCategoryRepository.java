@@ -18,8 +18,8 @@ public interface SpringDataCategoryRepository extends JpaRepository<CategoryEnti
 
     @Query(value = "SELECT new com.treshermanitos.api.application.dto.StadisticsCategory( " +
             "c.id, c.name, SUM(pp.quantity)) FROM Category c " +
-            "JOIN c.products p " +
-            "JOIN p.purchaseProducts pp " +
+            "JOIN Product p ON  p.category.id = c.id " +
+            "JOIN PurchaseProduct pp ON p.id = pp.product.id " +
             "GROUP BY p.id, p.name ORDER BY SUM(pp.quantity) DESC LIMIT 5")
     List<StadisticsCategory> get5mostSales();
 
